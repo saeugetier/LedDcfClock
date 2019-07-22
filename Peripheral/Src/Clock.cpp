@@ -91,7 +91,52 @@ void RtcClock::calibrate(time_t time, uint16_t subseconds)
 	}
 	else
 	{
-		//calculate calibration value...
+		//calculate calibration value... for testing, a simple method is used. decrement/increment by 1
+		int32_t correction_value = 0;
+		if(secondDifference < 0)
+			correction_value = -1;
+		else if(secondDifference > 0)
+			correction_value = 1;
+		else if(subsecondDifference < 0)
+			correction_value = -1;
+		else if(subsecondDifference > 0)
+			correction_value = 1;
+
+		applyCorrectionValue(correction_value);
+	}
+}
+
+void RtcClock::applyCorrectionValue(int32_t correction_value)
+{
+	while(correction_value)
+	{
+		if(correction_value > 0)
+		{
+			if(LL_RTC_CAL_IsPulseInserted(RTC) && LL_RTC_CAL_GetMinus(RTC) == RTC_CALR_CALM_Msk) //is 0.9ppm
+			{
+				LL_RTC_CAL_SetPulse(RTC, LL_RTC_CALIB_INSERTPULSE_NONE); // handle overflow
+				LL_RTC_CAL_SetMinus(RTC, 0);
+			}
+			else if(LL_RTC_CAL_GetMinus(RTC) != RTC_CALR_CALM_Msk) //while not fullscale
+			{
+				LL_RTC_CAL_SetMinus(RTC, 1 + LL_RTC_CAL_GetMinus(RTC));
+			}
+
+			correction_value--;
+		}
+		else if(correction_value < 0)
+		{
+			if(!LL_RTC_CAL_IsPulseInserted(RTC) && LL_RTC_CAL_GetMinus(RTC) == 0) //is 0ppm
+			{
+				LL_RTC_CAL_SetPulse(RTC, LL_RTC_CALIB_INSERTPULSE_SET); // handle overflow
+				LL_RTC_CAL_SetMinus(RTC, RTC_CALR_CALM_Msk);
+			}
+			else if(!LL_RTC_CAL_IsPulseInserted(RTC) && LL_RTC_CAL_GetMinus(RTC) != 0) //while not fullscale
+			{
+				LL_RTC_CAL_SetMinus(RTC, LL_RTC_CAL_GetMinus(RTC) - 1);
+			}
+			correction_value++;
+		}
 	}
 }
 

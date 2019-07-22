@@ -27,11 +27,6 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-extern "C"
-{
-	#include "dcf77_gen.h"
-}
-#include "dcf77.h"
 #include "LedClock.h"
 #include "dcf77_decoder.h"
 

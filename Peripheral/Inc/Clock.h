@@ -17,6 +17,7 @@ public:
 	bool isClockSet();
 protected:
 	Settings* mSettings;
+	void applyCorrectionValue(int32_t correction_value);
 };
 
 
