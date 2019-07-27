@@ -23,7 +23,7 @@
   16 Jul 2019 - adaption to application on STM32G0
 */
 
-#include "dcf77_decoder.h"
+#include "Dcf77.h"
 #include <math.h>
 #include <time.h>
 #include <string.h>
@@ -149,7 +149,7 @@ void DCF77::notify()
 		subsecondsCircularBufferPos = 0;
 
 	medianSubsecond = 0;
-	for(int i = 0; i < (sizeof(subsecondsCircularBuffer)/sizeof(uint16_t)); i++)
+	for(unsigned int i = 0; i < (sizeof(subsecondsCircularBuffer)/sizeof(uint16_t)); i++)
 		medianSubsecond += subsecondsCircularBuffer[i];
 	medianSubsecond = medianSubsecond / 64;
 
