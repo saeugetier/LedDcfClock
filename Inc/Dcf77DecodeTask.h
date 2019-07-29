@@ -8,8 +8,11 @@
 #ifndef INC_DCF77DECODETASK_H_
 #define INC_DCF77DECODETASK_H_
 
+#include "Task.h"
 
+class Dcf77DecodeTask : public Task
+{
 
-
+};
 
 #endif /* INC_DCF77DECODETASK_H_ */

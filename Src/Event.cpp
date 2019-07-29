@@ -7,4 +7,14 @@
 
 #include "Event.h"
 
+Event::Event(Task* task)
+{
+	mTask = task;
+}
+
+void Event::operator ()()
+{
+	mTask->handleEvent(mType);
+}
+
 

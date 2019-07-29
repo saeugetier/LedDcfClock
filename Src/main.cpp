@@ -153,7 +153,7 @@ int main(void)
   MX_TIM1_Init();
 
   ledClock.enable(true);
-  dcf.Start();
+
   /* USER CODE BEGIN 2 */
 #ifdef DEBUG
   LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_DBGMCU);

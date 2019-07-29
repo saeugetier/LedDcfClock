@@ -27,9 +27,10 @@ class Event
 public:
 	Event(Task* listener);
 	EventType getType() const;
+	void operator()();
 protected:
 	EventType mType;
+	Task* mTask;
 };
-
 
 #endif /* INC_EVENT_H_ */

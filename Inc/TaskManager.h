@@ -21,12 +21,16 @@
 class TaskManager
 {
 public:
+	TaskManager();
 	void invokeEvent(EventType event);
 	void addTask(Task* task);
 	void addEvent(Event* event);
+	void runTasks();
 protected:
 	Event* mEventList[MAX_EVENTS];
 	Task* mTaskList[MAX_TASKS];
+	void sleep();
+	void deepSleep();
 };
 
 #endif /* INC_TASKMANAGER_H_ */
