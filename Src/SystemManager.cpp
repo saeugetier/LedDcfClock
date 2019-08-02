@@ -22,7 +22,6 @@ template<class periph>
 PeripheralReference<periph>::PeripheralReference(PeripheralReference& copy) :
 		mInitializationRequested(false), mReference(copy.mReference)
 {
-
 }
 
 template<class periph>
@@ -49,15 +48,15 @@ void PeripheralReference<periph>::shutdown()
 	mInitializationRequested = false;
 }
 
-template <class periph>
+template<class periph>
 PeripheralReference<periph>::~PeripheralReference()
 {
 	shutdown();
 }
 
-SystemManager::SystemManager()
+SystemManager::SystemManager() :
+		mPulseDetector(false), mDcfPulseCallback(&mTaskManager)
 {
-
 }
 
 void SystemManager::runTasks()
