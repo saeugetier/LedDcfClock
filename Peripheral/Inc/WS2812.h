@@ -41,13 +41,6 @@ public:
 		TIM3_Init();
 	}
 
-	virtual void initialize()
-	{
-		memset(mDmaBuffer, 0, sizeof(mDmaBuffer));
-
-		clearBuffer();
-	}
-
 	void clearBuffer()
 	{
 		memset(mPixelColor, 0, sizeof(mPixelColor));
@@ -74,11 +67,20 @@ public:
 		return !LL_DMA_IsActiveFlag_TC1(DMA1) && LL_DMA_IsEnabledChannel(DMA1, LL_DMA_CHANNEL_1);
 	}
 
+
+protected:
+	virtual void initialize()
+	{
+		memset(mDmaBuffer, 0, sizeof(mDmaBuffer));
+
+		clearBuffer();
+	}
+
 	virtual void shutdown()
 	{
 		LL_APB1_GRP1_DisableClock(LL_APB1_GRP1_PERIPH_TIM3);
 	}
-protected:
+
 	RGB mPixelColor[NumLeds];
 	uint32_t mDmaBuffer[NumLeds*24 + 25];
 

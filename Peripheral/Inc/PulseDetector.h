@@ -9,14 +9,15 @@ class PulseDetector : public Peripheral
 {
 public:
 	PulseDetector(bool SyncOnRisingFlank);
-	virtual void initialize();
-	virtual void shutdown();
 
 	void registerPulseCallback(Callback* callback);
 	void handleInterrupt();
 	uint32_t getLowEdge();
 	uint32_t getHighEdge();
 protected:
+	virtual void initialize();
+	virtual void shutdown();
+
 	Callback* mPulseCallback;
 
 	uint32_t mEdgeHigh;
