@@ -38,15 +38,15 @@ template<EventType type>
 class TaskCallback: public Callback
 {
 protected:
-	TaskManager* mManager;
+	TaskManager& mManager;
 public:
-	TaskCallback(TaskManager* manager) :
+	TaskCallback(TaskManager& manager) :
 			mManager(manager)
 	{
 	}
 	void notify()
 	{
-		mManager->invokeEvent(type);
+		mManager.invokeEvent(type);
 	}
 };
 
