@@ -9,6 +9,7 @@
 #define INC_TASKMANAGER_H_
 
 #include "Event.h"
+#include "Callback.h"
 
 #ifndef MAX_EVENTS
 #define MAX_EVENTS 16
@@ -31,6 +32,22 @@ protected:
 	Task* mTaskList[MAX_TASKS];
 	void sleep();
 	void deepSleep();
+};
+
+template<EventType type>
+class TaskCallback: public Callback
+{
+protected:
+	TaskManager* mManager;
+public:
+	TaskCallback(TaskManager* manager) :
+			mManager(manager)
+	{
+	}
+	void notify()
+	{
+		mManager->invokeEvent(type);
+	}
 };
 
 #endif /* INC_TASKMANAGER_H_ */
