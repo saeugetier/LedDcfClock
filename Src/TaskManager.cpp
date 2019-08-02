@@ -83,6 +83,7 @@ void TaskManager::sleep()
 	/* Disable Deep Sleep flag */
 	LL_LPM_EnableSleep();
 
+	/* Request Wait For Interrupt */
 	__WFI();
 }
 
