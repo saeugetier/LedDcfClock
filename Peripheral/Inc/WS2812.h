@@ -36,7 +36,7 @@ template<int NumLeds>
 class WS2812 : public Peripheral
 {
 public:
-	WS2812() : mDmaBuffer({0})
+	WS2812() : mDmaBuffer{0}
     {
 	}
 
