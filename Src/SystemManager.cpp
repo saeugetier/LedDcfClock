@@ -55,7 +55,8 @@ PeripheralReference<periph>::~PeripheralReference()
 }
 
 SystemManager::SystemManager() :
-		mPulseDetector(false), mDcfPulseCallback(&mTaskManager)
+		mPulseDetector(false), mDcfPulseCallback(mTaskManager),
+		mPowerSourceCallback(mTaskManager)
 {
 }
 

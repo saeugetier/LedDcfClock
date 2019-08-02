@@ -54,6 +54,7 @@ protected:
 	RtcClock mClock;
 	//Callbacks
 	TaskCallback<EventType::DCF_PULSE> mDcfPulseCallback;
+	TaskCallback<EventType::POWER_SOURCE_CHANGED> mPowerSourceCallback;
 };
 
 #endif /* INC_SYSTEMMANAGER_H_ */
