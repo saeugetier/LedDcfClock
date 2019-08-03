@@ -9,8 +9,7 @@
 #define INC_TASK_H_
 
 #include "stdint.h"
-
-enum class EventType : uint32_t;
+#include "EventType.h"
 
 enum class TaskMode : uint32_t
 {
@@ -26,7 +25,7 @@ public:
 	void setTaskMode(TaskMode mode);
 	TaskMode getTaskMode() const;
 	virtual void run() = 0;
-	virtual void handleEvent(EventType event) = 0;
+	virtual void handleEvent(EventType::type event) = 0;
 protected:
 	virtual void taskModeChanged(TaskMode mode) = 0;
 	TaskMode mMode;

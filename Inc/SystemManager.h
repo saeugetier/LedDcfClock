@@ -17,6 +17,23 @@
 #include "WS2812.h"
 #include "PulseDetector.h"
 #include "Clock.h"
+#include "Buttons.h"
+
+class SystemEventType : public EventType
+{
+public:
+	enum type : uint32_t
+	{
+		DCF_POWER_DOWN,
+		DCF_PULSE,
+		DCF_WAKE_UP,
+		SYSTICK_EVENT,
+		DMA_BUFFER_EMPTY,
+		POWER_SOURCE_CHANGED,
+		SUPPLY_VOLTAGE_LEVEL,
+		BUTTON_EVENT
+	};
+};
 
 template<class periph>
 class PeripheralReference: protected PeripheralInitializer
@@ -52,9 +69,14 @@ protected:
 	LedPowerEnable mLedPowerEnable;
 	PulseDetector mPulseDetector;
 	RtcClock mClock;
+	Buttons mButtons;
 	//Callbacks
-	TaskCallback<EventType::DCF_PULSE> mDcfPulseCallback;
-	TaskCallback<EventType::POWER_SOURCE_CHANGED> mPowerSourceCallback;
+	TaskCallback<static_cast<EventType::type>(SystemEventType::DCF_PULSE)> mDcfPulseCallback;
+	TaskCallback<static_cast<EventType::type>(SystemEventType::POWER_SOURCE_CHANGED)> mPowerSourceCallback;
+	TaskCallback<static_cast<EventType::type>(SystemEventType::DCF_POWER_DOWN)> mDcfPowerDownCallback;
+	TaskCallback<static_cast<EventType::type>(SystemEventType::DCF_WAKE_UP)> mDcfWakeUpCallback;
+	TaskCallback<static_cast<EventType::type>(SystemEventType::SYSTICK_EVENT)> mSysTickCallback;
+	TaskCallback<static_cast<EventType::type>(SystemEventType::SUPPLY_VOLTAGE_LEVEL)> mPowerSupplyCallback;
 };
 
 #endif /* INC_SYSTEMMANAGER_H_ */

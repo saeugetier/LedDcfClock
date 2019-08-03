@@ -23,7 +23,7 @@ class TaskManager
 {
 public:
 	TaskManager();
-	void invokeEvent(EventType event);
+	void invokeEvent(EventType::type event);
 	void addTask(Task* task);
 	void addEvent(Event* event);
 	void runTasks();
@@ -34,7 +34,7 @@ protected:
 	void deepSleep();
 };
 
-template<EventType type>
+template<EventType::type type>
 class TaskCallback: public Callback
 {
 protected:

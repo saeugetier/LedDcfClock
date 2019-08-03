@@ -10,27 +10,16 @@
 
 #include "stdint.h"
 #include "Task.h"
-
-enum class EventType : uint32_t
-{
-	DCF_POWER_DOWN,
-	DCF_PULSE,
-	DCF_WAKE_UP,
-	SYSTICK_EVENT,
-	DMA_BUFFER_EMPTY,
-	POWER_SOURCE_CHANGED,
-	SUPPLY_VOLTAGE_LEVEL,
-	BUTTON_WAKE_UP
-};
+#include "EventType.h"
 
 class Event
 {
 public:
 	Event(Task* listener);
-	EventType getType() const;
+	EventType::type getType() const;
 	void operator()();
 protected:
-	EventType mType;
+	EventType::type mType;
 	Task* mTask;
 };
 

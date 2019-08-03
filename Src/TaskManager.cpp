@@ -17,7 +17,7 @@ TaskManager::TaskManager()
 	memset(mEventList, 0, sizeof(mEventList));
 }
 
-void TaskManager::invokeEvent(EventType event)
+void TaskManager::invokeEvent(EventType::type event)
 {
 	for(int i = 0; i < MAX_EVENTS; i++)
 	{

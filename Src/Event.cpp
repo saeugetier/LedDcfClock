@@ -17,7 +17,7 @@ void Event::operator ()()
 	mTask->handleEvent(mType);
 }
 
-EventType Event::getType() const
+EventType::type Event::getType() const
 {
 	return mType;
 }
