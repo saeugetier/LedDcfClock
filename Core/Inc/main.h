@@ -72,6 +72,12 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define PUSHBUTTON_Pin LL_GPIO_PIN_0
+#define PUSHBUTTON_GPIO_Port GPIOA
+#define SETTINGS2_Pin LL_GPIO_PIN_2
+#define SETTINGS2_GPIO_Port GPIOA
+#define SETTINGS1_Pin LL_GPIO_PIN_4
+#define SETTINGS1_GPIO_Port GPIOA
 #define TESTPOINT_Pin LL_GPIO_PIN_5
 #define TESTPOINT_GPIO_Port GPIOA
 #define WS2812_Pin LL_GPIO_PIN_0
