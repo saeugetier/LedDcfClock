@@ -67,3 +67,21 @@ bool LedClock::isReady()
 {
 	return !mLeds.isBusy();
 }
+
+void LedClock::displayError(Error error)
+{
+	mLeds.clearBuffer();
+	if(error == Error::HARDWARE_FAULT)
+	{
+		mLeds.setPixelColor(RGB(0,255,255), 0);
+		mLeds.setPixelColor(RGB(0,255,255), 1);
+		mLeds.setPixelColor(RGB(0,255,255), 2);
+	}
+	else if(error == Error::TIME_NOT_SET)
+	{
+		mLeds.setPixelColor(RGB(255,255,0), 0);
+		mLeds.setPixelColor(RGB(255,255,0), 1);
+		mLeds.setPixelColor(RGB(255,255,0), 2);
+	}
+	mLeds.showLeds();
+}
