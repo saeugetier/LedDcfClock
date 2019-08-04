@@ -36,16 +36,8 @@ template<int NumLeds>
 class WS2812 : public Peripheral
 {
 public:
-	WS2812() : mDmaBuffer ({0}) {
-		DMA_Init();
-		TIM3_Init();
-	}
-
-	virtual void initialize()
-	{
-		memset(mDmaBuffer, 0, sizeof(mDmaBuffer));
-
-		clearBuffer();
+	WS2812() : mDmaBuffer{0}
+    {
 	}
 
 	void clearBuffer()
@@ -74,11 +66,24 @@ public:
 		return !LL_DMA_IsActiveFlag_TC1(DMA1) && LL_DMA_IsEnabledChannel(DMA1, LL_DMA_CHANNEL_1);
 	}
 
+
+protected:
+	virtual void initialize()
+	{
+		DMA_Init();
+		TIM3_Init();
+
+		memset(mDmaBuffer, 0, sizeof(mDmaBuffer));
+
+		clearBuffer();
+	}
+
 	virtual void shutdown()
 	{
-		LL_APB1_GRP1_DisableClock(LL_APB1_GRP1_PERIPH_TIM3);
+		DMA_DeInit();
+		TIM3_DeInit();
 	}
-protected:
+
 	RGB mPixelColor[NumLeds];
 	uint32_t mDmaBuffer[NumLeds*24 + 25];
 
@@ -92,6 +97,12 @@ protected:
 		/* DMA1_Channel1_IRQn interrupt configuration */
 		NVIC_SetPriority(DMA1_Channel1_IRQn, 0);
 		NVIC_EnableIRQ(DMA1_Channel1_IRQn);
+	}
+
+	void DMA_DeInit()
+	{
+		NVIC_DisableIRQ(DMA1_Channel1_IRQn);
+		LL_AHB1_GRP1_DisableClock(LL_AHB1_GRP1_PERIPH_DMA1);
 	}
 
 	void TIM3_Init()
@@ -149,6 +160,13 @@ protected:
 		GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
 		GPIO_InitStruct.Alternate = LL_GPIO_AF_1;
 		LL_GPIO_Init(WS2812_GPIO_Port, &GPIO_InitStruct);
+	}
+
+	void TIM3_DeInit()
+	{
+		LL_GPIO_SetPinMode(WS2812_GPIO_Port, WS2812_Pin, LL_GPIO_MODE_ANALOG);
+		LL_TIM_DeInit(TIM3);
+		LL_APB1_GRP1_DisableClock(LL_APB1_GRP1_PERIPH_TIM3);
 	}
 
 	void updateLedBuffer()

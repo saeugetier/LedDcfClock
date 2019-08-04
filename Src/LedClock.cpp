@@ -22,13 +22,13 @@ void LedClock::enable(bool enable)
 	if(enable)
 	{
 		mLedPowerEnable.initialize();
-		mLeds.initialize();
+		//mLeds.initialize();
 	}
 	else
 	{
 		setPower(false);
 		mLedPowerEnable.shutdown();
-		mLeds.shutdown();
+		//mLeds.shutdown();
 	}
 }
 

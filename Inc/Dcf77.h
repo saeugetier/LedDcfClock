@@ -14,11 +14,10 @@
 #include "Clock.h"
 #include "Callback.h"
 
-class DCF77 : public Callback {
+class DCF77 {
 private:
 	//Private variables
 	RtcClock* clock;
-	PulseDetector pulseDetector;
     uint8_t pulseStart;
 
     // DCF77 and internal timestamps
@@ -88,12 +87,11 @@ public:
 
     time_t getTime(void);
     time_t getUTCTime(void);
-    void Start(void);
-    void Stop(void);
+
     //static void int0handler();
     int32_t getSummerTime();
 
-    virtual void notify();
+    void decode(uint32_t risingEdge, uint32_t fallingEdge);
  };
 
 

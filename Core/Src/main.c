@@ -100,10 +100,9 @@ void SystemClock_Config(void)
 
   /* Set APB1 prescaler*/
   LL_RCC_SetAPB1Prescaler(LL_RCC_APB1_DIV_1);
-
   LL_Init1msTick(16000000);
-
   LL_SYSTICK_SetClkSource(LL_SYSTICK_CLKSOURCE_HCLK);
+  LL_SetSystemCoreClock(16000000);
   /* Update CMSIS variable (which can be updated also through SystemCoreClockUpdate function) */
   LL_SetSystemCoreClock(16000000);
   LL_RCC_SetRTCClockSource(LL_RCC_RTC_CLKSOURCE_LSE);

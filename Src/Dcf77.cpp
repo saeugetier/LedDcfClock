@@ -23,7 +23,7 @@
   16 Jul 2019 - adaption to application on STM32G0
 */
 
-#include "dcf77_decoder.h"
+#include "Dcf77.h"
 #include <math.h>
 #include <time.h>
 #include <string.h>
@@ -47,9 +47,8 @@
 /**
  * Constructor
  */
-DCF77::DCF77(RtcClock* _clock, bool OnRisingFlank) : pulseDetector(OnRisingFlank)
+DCF77::DCF77(RtcClock* _clock, bool OnRisingFlank)
 {
-	pulseDetector.registerPulseCallback(this);
 	// Parameters shared between interupt loop and main loop
 	filledBuffer = 0;
 	filledTimestamp= 0;
@@ -89,22 +88,6 @@ void DCF77::initialize(void)
 }
 
 /**
- * Start receiving DCF77 information
- */
-void DCF77::Start(void)
-{
-	pulseDetector.initialize();
-}
-
-/**
- * Stop receiving DCF77 information
- */
-void DCF77::Stop(void)
-{
-	pulseDetector.shutdown();
-}
-
-/**
  * Initialize buffer for next time update
  */
 inline void DCF77::bufferinit(void)
@@ -116,12 +99,9 @@ inline void DCF77::bufferinit(void)
 /**
  * Callback handler that processes up-down flanks into pulses and stores these in the buffer
  */
-void DCF77::notify()
+
+void DCF77::decode(uint32_t risingEdgeTime, uint32_t fallingEdgeTime)
 {
-
-	uint32_t risingEdgeTime = pulseDetector.getHighEdge();
-	uint32_t fallingEdgeTime = pulseDetector.getLowEdge();
-
 	if(pulseStart == HIGH)
 	{
 		trailingEdge = leadingEdge + fallingEdgeTime; //add last leading edge time
@@ -149,7 +129,7 @@ void DCF77::notify()
 		subsecondsCircularBufferPos = 0;
 
 	medianSubsecond = 0;
-	for(int i = 0; i < (sizeof(subsecondsCircularBuffer)/sizeof(uint16_t)); i++)
+	for(unsigned int i = 0; i < (sizeof(subsecondsCircularBuffer)/sizeof(uint16_t)); i++)
 		medianSubsecond += subsecondsCircularBuffer[i];
 	medianSubsecond = medianSubsecond / 64;
 
