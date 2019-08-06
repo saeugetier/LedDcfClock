@@ -6,3 +6,19 @@
  */
 
 #include "LedClockTask.h"
+
+
+void LedClockTask::run()
+{
+
+}
+
+void LedClockTask::handleEvent(EventType::type event)
+{
+
+}
+
+void LedClockTask::taskModeChanged(TaskMode mode)
+{
+
+}

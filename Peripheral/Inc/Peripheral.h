@@ -8,6 +8,8 @@
 #ifndef PERIPHERAL_INC_PERIPHERAL_H_
 #define PERIPHERAL_INC_PERIPHERAL_H_
 
+#include "Callback.h"
+
 class Peripheral;
 
 class PeripheralInitializer
@@ -25,6 +27,17 @@ public:
 protected:
 	virtual void initialize() = 0;
 	virtual void shutdown() = 0;
+};
+
+class InterruptPeripheral : public Peripheral
+{
+public:
+	void registerCallback(Callback* callback);
+	virtual void handleInterrupt() = 0;
+	static InterruptPeripheral* getInstance();
+protected:
+	Callback* mCallback;
+	static InterruptPeripheral* mPeripheralInstance;
 };
 
 #endif /* PERIPHERAL_INC_PERIPHERAL_H_ */

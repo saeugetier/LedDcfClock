@@ -7,6 +7,8 @@
 
 #include "Peripheral.h"
 
+InterruptPeripheral* InterruptPeripheral::mPeripheralInstance = nullptr;
+
 void PeripheralInitializer::_init(Peripheral &periph)
 {
 	periph.initialize();
@@ -15,4 +17,15 @@ void PeripheralInitializer::_init(Peripheral &periph)
 void PeripheralInitializer::_shutdown(Peripheral &periph)
 {
 	periph.shutdown();
+}
+
+void InterruptPeripheral::registerCallback(Callback* callback)
+{
+	mCallback = callback;
+	mPeripheralInstance = this;
+}
+
+InterruptPeripheral* InterruptPeripheral::getInstance()
+{
+	return mPeripheralInstance;
 }

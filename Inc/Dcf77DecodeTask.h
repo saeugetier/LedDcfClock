@@ -12,7 +12,11 @@
 
 class Dcf77DecodeTask : public Task
 {
-
+public:
+	virtual void run();
+	virtual void handleEvent(EventType::type event);
+protected:
+	virtual void taskModeChanged(TaskMode mode);
 };
 
 #endif /* INC_DCF77DECODETASK_H_ */
