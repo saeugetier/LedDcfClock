@@ -17,10 +17,15 @@
 class LedClock
 {
 public:
+	enum class Error {
+		TIME_NOT_SET,
+		HARDWARE_FAULT
+	};
 	LedClock(Settings* settings);
 	~LedClock();
 	void enable(bool enable);
 	void displayTime(const tm &time, bool displaySeconds  = false, uint8_t subsecond = 0);
+	void displayError(Error error);
 	void setPower(bool on);
 	bool isReady();
 protected:
