@@ -2,8 +2,6 @@
 #include "main.h"
 #include <cstddef>
 
-PulseDetector* callbackPulseDetector = NULL;
-
 PulseDetector::PulseDetector(bool SyncOnRisingFlank) : mPulseCallback(0)
 {
 	mSyncOnRisingFlank = SyncOnRisingFlank;
@@ -68,7 +66,6 @@ void PulseDetector::shutdown()
 void PulseDetector::registerPulseCallback(Callback* callback)
 {
 	mPulseCallback = callback;
-	callbackPulseDetector = this;
 }
 
 void PulseDetector::handleInterrupt()
@@ -122,7 +119,6 @@ extern "C"
 {
 	void TIM1_CC_IRQHandler(void)
 	{
-		if(callbackPulseDetector)
-			callbackPulseDetector->handleInterrupt();
+		PulseDetector::getInstance()->handleInterrupt();
 	}
 }

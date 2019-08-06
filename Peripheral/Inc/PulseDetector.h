@@ -5,7 +5,7 @@
 #include "Callback.h"
 #include "stdint.h"
 
-class PulseDetector : public Peripheral
+class PulseDetector : public InterruptPeripheral
 {
 public:
 	PulseDetector(bool SyncOnRisingFlank);
