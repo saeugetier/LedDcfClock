@@ -18,6 +18,8 @@
 #include "PulseDetector.h"
 #include "Clock.h"
 #include "Buttons.h"
+#include "LedClockTask.h"
+#include "Dcf77DecodeTask.h"
 
 class SystemEventType : public EventType
 {
@@ -70,13 +72,16 @@ protected:
 	PulseDetector mPulseDetector;
 	RtcClock mClock;
 	Buttons mButtons;
-	//Callbacks
+	// Callbacks
 	TaskCallback<static_cast<EventType::type>(SystemEventType::DCF_PULSE)> mDcfPulseCallback;
 	TaskCallback<static_cast<EventType::type>(SystemEventType::POWER_SOURCE_CHANGED)> mPowerSourceCallback;
 	TaskCallback<static_cast<EventType::type>(SystemEventType::DCF_POWER_DOWN)> mDcfPowerDownCallback;
 	TaskCallback<static_cast<EventType::type>(SystemEventType::DCF_WAKE_UP)> mDcfWakeUpCallback;
 	TaskCallback<static_cast<EventType::type>(SystemEventType::SYSTICK_EVENT)> mSysTickCallback;
 	TaskCallback<static_cast<EventType::type>(SystemEventType::SUPPLY_VOLTAGE_LEVEL)> mPowerSupplyCallback;
+	// Tasks
+	LedClockTask mLedClockTask;
+	Dcf77DecodeTask mDcf77DecodeTask;
 };
 
 #endif /* INC_SYSTEMMANAGER_H_ */
