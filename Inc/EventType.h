@@ -15,6 +15,7 @@ class EventType
 public:
 	enum type : uint32_t
 	{
+		NONE = 0
 	};
 };
 
