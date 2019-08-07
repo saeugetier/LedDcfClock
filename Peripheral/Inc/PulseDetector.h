@@ -11,6 +11,7 @@ public:
 	PulseDetector(bool SyncOnRisingFlank);
 
 	void registerPulseCallback(Callback* callback);
+	void registerWakeupCallback(Callback* callback);
 	void handleInterrupt();
 	uint32_t getLowEdge();
 	uint32_t getHighEdge();
@@ -19,6 +20,7 @@ protected:
 	virtual void shutdown();
 
 	Callback* mPulseCallback;
+	Callback* mWakeupCallback;
 
 	uint32_t mEdgeHigh;
 	uint32_t mEdgeLow;
