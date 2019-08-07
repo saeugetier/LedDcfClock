@@ -16,6 +16,8 @@
 #include "LedPowerEnable.h"
 #include "WS2812.h"
 #include "PulseDetector.h"
+#include "DcfWakeup.h"
+#include "DcfPowerdown.h"
 #include "Clock.h"
 #include "Buttons.h"
 #include "LedClockTask.h"
@@ -26,6 +28,7 @@ class SystemEventType : public EventType
 public:
 	enum type : uint32_t
 	{
+		NONE = 0,
 		DCF_POWER_DOWN,
 		DCF_PULSE,
 		DCF_WAKE_UP,
@@ -66,12 +69,19 @@ public:
 protected:
 	TaskManager mTaskManager;
 	//Peripherals
+	//LED
 	SystemTick mSystemTick;
 	WS2812<60+12> mWS2812;
 	LedPowerEnable mLedPowerEnable;
+	//DCF
 	PulseDetector mPulseDetector;
+	DcfWakeup mDcfWakeup;
+	DcfPowerdown mDcfPowerdown;
+	//Clock
 	RtcClock mClock;
+	//Common
 	Buttons mButtons;
+
 	// Callbacks
 	TaskCallback<static_cast<EventType::type>(SystemEventType::DCF_PULSE)> mDcfPulseCallback;
 	TaskCallback<static_cast<EventType::type>(SystemEventType::POWER_SOURCE_CHANGED)> mPowerSourceCallback;
