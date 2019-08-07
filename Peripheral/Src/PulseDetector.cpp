@@ -60,12 +60,16 @@ void PulseDetector::shutdown()
 {
 	LL_TIM_DisableCounter(TIM1);
 	LL_APB2_GRP1_DisableClock(LL_APB2_GRP1_PERIPH_TIM1);
-
 }
 
 void PulseDetector::registerPulseCallback(Callback* callback)
 {
 	mPulseCallback = callback;
+}
+
+void PulseDetector::registerWakeupCallback(Callback* callback)
+{
+	mWakeupCallback = callback;
 }
 
 void PulseDetector::handleInterrupt()
@@ -115,10 +119,4 @@ uint32_t PulseDetector::getHighEdge()
 	return mEdgeHigh;
 }
 
-extern "C"
-{
-	void TIM1_CC_IRQHandler(void)
-	{
-		PulseDetector::getInstance()->handleInterrupt();
-	}
-}
+
