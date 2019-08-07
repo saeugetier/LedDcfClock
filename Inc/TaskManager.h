@@ -29,6 +29,7 @@ public:
 	void runTasks();
 protected:
 	Event* mEventList[MAX_EVENTS];
+	EventType::type mInvokedEvents[MAX_EVENTS];
 	Task* mTaskList[MAX_TASKS];
 	void sleep();
 	void deepSleep();

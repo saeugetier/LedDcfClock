@@ -11,7 +11,7 @@
 #include "stm32g0xx_ll_pwr.h"
 #include "stm32g0xx_ll_cortex.h"
 
-TaskManager::TaskManager()
+TaskManager::TaskManager() : mInvokedEvents {EventType::NONE}
 {
 	memset(mTaskList, 0, sizeof(mTaskList));
 	memset(mEventList, 0, sizeof(mEventList));
@@ -19,15 +19,15 @@ TaskManager::TaskManager()
 
 void TaskManager::invokeEvent(EventType::type event)
 {
-	for(int i = 0; i < MAX_EVENTS; i++)
+	if(event != EventType::NONE)
 	{
-		if(mEventList[i] != nullptr)
+		for(int i; i < MAX_EVENTS; i++)
 		{
-			if(mEventList[i]->getType() == event)
+			if(mInvokedEvents[i] == EventType::NONE)
 			{
-				(*mEventList[i])();
+				mInvokedEvents[i] = event;
+				break;
 			}
-
 		}
 	}
 }
@@ -59,6 +59,35 @@ void TaskManager::addEvent(Event* event)
 void TaskManager::runTasks()
 {
 	TaskMode taskModeLevel = TaskMode::NONE;
+
+	//execute events first
+	for(int i = 0; i < MAX_EVENTS; i++)
+	{
+		if(mInvokedEvents[i] == EventType::NONE)
+		{
+			break;
+		}
+		else  //invoked event list is not empty
+		{
+			EventType::type event = mInvokedEvents[i];
+			for(int j = 0; j < MAX_EVENTS; j++)
+			{
+				if(mEventList[j] != nullptr)
+				{
+					if(mEventList[j]->getType() == event)
+					{
+						(*mEventList[j])();
+					}
+
+				}
+				else
+					break;
+			}
+			mInvokedEvents[i] = EventType::NONE;
+		}
+	}
+
+	//than task normally
 	for (int i = 0; i < MAX_TASKS; i++)
 	{
 		if (mTaskList[i] != nullptr)
