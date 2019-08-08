@@ -5,9 +5,13 @@
  *      Author: timm
  */
 
-#include "PulseDetector.h"
-#include "SystemTick.h"
+#include "stm32g0xx_ll_exti.h"
+#include "stm32g0xx_ll_system.h"
 
+#include "PulseDetector.h"
+#include "DcfPowerdown.h"
+#include "SystemTick.h"
+#include "Buttons.h"
 
 //using extern "C" to get the right function reference -- ABI changed for C++ function calls
 extern "C"
@@ -30,7 +34,11 @@ extern "C"
 {
 void EXTI0_1_IRQHandler()
 {
-
+	if (LL_SYSCFG_IsActiveFlag_EXTI0())
+	{
+		Buttons::getInstance()->handleInterrupt();
+		LL_EXTI_ClearFallingFlag_0_31(LL_EXTI_LINE_0);
+	}
 }
 }
 
@@ -38,7 +46,11 @@ extern "C"
 {
 void EXTI2_3_IRQHandler()
 {
-
+	if (LL_SYSCFG_IsActiveFlag_EXTI2())
+	{
+		Buttons::getInstance()->handleInterrupt();
+		LL_EXTI_ClearFallingFlag_0_31(LL_EXTI_LINE_2);
+	}
 }
 }
 
@@ -46,7 +58,19 @@ extern "C"
 {
 void EXTI4_15_IRQHandler()
 {
-
+	if (LL_SYSCFG_IsActiveFlag_EXTI4())
+	{
+		if (LL_EXTI_IsActiveFallingFlag_0_31(LL_EXTI_LINE_4)) //Buttons react on falling edges
+		{
+			Buttons::getInstance()->handleInterrupt();
+			LL_EXTI_ClearFallingFlag_0_31(LL_EXTI_LINE_4);
+		}
+		else  //Dcf Powerdown reacts on rising edges
+		{
+			DcfPowerdown::getInstance()->handleInterrupt();
+			LL_EXTI_ClearRisingFlag_0_31(LL_EXTI_LINE_4);
+		}
+	}
 }
 }
 
