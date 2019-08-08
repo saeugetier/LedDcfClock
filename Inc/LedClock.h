@@ -30,7 +30,7 @@ public:
 	bool isReady();
 protected:
 	WS2812<60 + 12> mLeds;
-	LedPowerEnable mLedPowerEnable;
+	//LedPowerEnable mLedPowerEnable;
 	Settings* mSettings;
 };
 

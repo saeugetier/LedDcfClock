@@ -9,9 +9,6 @@ class PulseDetector : public InterruptPeripheral
 {
 public:
 	PulseDetector(bool SyncOnRisingFlank);
-
-	void registerPulseCallback(Callback* callback);
-	void registerWakeupCallback(Callback* callback);
 	void handleInterrupt();
 	uint32_t getLowEdge();
 	uint32_t getHighEdge();

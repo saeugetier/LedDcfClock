@@ -14,6 +14,7 @@ class DcfPowerdown : public InterruptPeripheral
 {
 public:
 	void handleInterrupt();
+protected:
 	void initialize();
 	void shutdown();
 };

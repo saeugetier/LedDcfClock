@@ -8,8 +8,6 @@
 class RtcClock : public Peripheral
 {
 public:
-	virtual void initialize();
-	virtual void shutdown();
 	time_t now();
 	uint16_t getSubsecond();
 	void calibrate(time_t time, uint16_t subseconds);
@@ -18,6 +16,8 @@ public:
 protected:
 	Settings* mSettings;
 	void applyCorrectionValue(int32_t correction_value);
+	virtual void initialize();
+	virtual void shutdown();
 };
 
 

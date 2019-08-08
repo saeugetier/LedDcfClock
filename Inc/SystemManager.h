@@ -22,6 +22,7 @@
 #include "Buttons.h"
 #include "LedClockTask.h"
 #include "Dcf77DecodeTask.h"
+#include "StatusLed.h"
 
 class SystemEventType : public EventType
 {
@@ -65,7 +66,12 @@ public:
 	PeripheralReference<WS2812<60+12>> getWS2812Reference();
 	PeripheralReference<LedPowerEnable> getLedPowerEnableReference();
 	PeripheralReference<PulseDetector> getPulseDetector();
+	PeripheralReference<DcfWakeup> getDcfWakeupReference();
+	PeripheralReference<DcfPowerdown> getDcfPowerdownReference();
 	PeripheralReference<RtcClock> getClockReference();
+	PeripheralReference<Buttons> getButtonsReference();
+	PeripheralReference<StatusLed> getStatusLed1Reference();
+	PeripheralReference<StatusLed> getStatusLed2Reference();
 protected:
 	TaskManager mTaskManager;
 	//Peripherals
@@ -81,6 +87,8 @@ protected:
 	RtcClock mClock;
 	//Common
 	Buttons mButtons;
+	StatusLed mLed1;
+	StatusLed mLed2;
 
 	// Callbacks
 	TaskCallback<static_cast<EventType::type>(SystemEventType::DCF_PULSE)> mDcfPulseCallback;

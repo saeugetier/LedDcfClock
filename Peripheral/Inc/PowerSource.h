@@ -10,11 +10,13 @@
 
 #include "Peripheral.h"
 
-class PowerSource : public Peripheral
+class PowerSource : public InterruptPeripheral
 {
 protected:
 	virtual void initialize();
 	virtual void shutdown();
+public:
+	virtual void handleInterrupt();
 };
 
 #endif /* INC_POWERSOURCE_H_ */

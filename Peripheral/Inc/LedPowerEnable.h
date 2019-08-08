@@ -14,9 +14,10 @@ class LedPowerEnable : public Peripheral
 {
 public:
 	LedPowerEnable();
+	void setPower(bool on);
+protected:
 	virtual void initialize();
 	virtual void shutdown();
-	void setPower(bool on);
 };
 
 

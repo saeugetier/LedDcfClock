@@ -9,6 +9,7 @@
 #define PERIPHERAL_INC_PERIPHERAL_H_
 
 #include "Callback.h"
+#include "stdint.h"
 
 class Peripheral;
 

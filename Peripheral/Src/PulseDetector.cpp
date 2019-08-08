@@ -62,16 +62,6 @@ void PulseDetector::shutdown()
 	LL_APB2_GRP1_DisableClock(LL_APB2_GRP1_PERIPH_TIM1);
 }
 
-void PulseDetector::registerPulseCallback(Callback* callback)
-{
-	mPulseCallback = callback;
-}
-
-void PulseDetector::registerWakeupCallback(Callback* callback)
-{
-	mWakeupCallback = callback;
-}
-
 void PulseDetector::handleInterrupt()
 {
 	LL_TIM_ClearFlag_UPDATE(TIM1);

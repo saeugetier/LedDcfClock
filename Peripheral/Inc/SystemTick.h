@@ -12,6 +12,7 @@
 
 class SystemTick : public InterruptPeripheral
 {
+public:
 	void handleInterrupt();
 protected:
 	virtual void initialize();

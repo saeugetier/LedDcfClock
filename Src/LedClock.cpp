@@ -21,13 +21,13 @@ void LedClock::enable(bool enable)
 {
 	if(enable)
 	{
-		mLedPowerEnable.initialize();
+		//mLedPowerEnable.initialize();
 		//mLeds.initialize();
 	}
 	else
 	{
 		setPower(false);
-		mLedPowerEnable.shutdown();
+		//mLedPowerEnable.shutdown();
 		//mLeds.shutdown();
 	}
 }
@@ -60,7 +60,7 @@ void LedClock::displayTime(const tm &time, bool displaySeconds, uint8_t subsecon
 
 void LedClock::setPower(bool on)
 {
-	mLedPowerEnable.setPower(on);
+	//mLedPowerEnable.setPower(on);
 }
 
 bool LedClock::isReady()
