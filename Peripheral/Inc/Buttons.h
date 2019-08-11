@@ -12,29 +12,42 @@
 #include "Peripheral.h"
 #include "Callback.h"
 
-class Buttons : public InterruptPeripheral
+class Button : public InterruptPeripheral
 {
 public:
-	enum ButtonSource : uint32_t
-	{
-		NONE = 0x00,
-		PUSHBUTTON = 0x01,
-		SETTINGSBUTTON1 = 0x02,
-		SETTINGSBUTTON2 = 0x04
-	};
-	ButtonSource getButtonsPressed();
+	Button(uint32_t pin);
+
+	bool getButtonPressed();
 
 	void handleInterrupt();
-protected:
-	void initialize();
-	void shutdown();
 
 	void setPinsToWakeup();
 	void setPinsToInterrupt();
 	bool isWakeupFlagSet();
 	void clearWakeupFlags();
+protected:
+	uint32_t mPin;
+	void initialize();
+	void shutdown();
 };
 
+class PushButton : public Button
+{
+public:
+	PushButton() : Button(0) {}
 
+};
+
+class Settings1Button : public Button
+{
+public:
+	Settings1Button() : Button(2) {	}
+};
+
+class Settings2Button : public Button
+{
+public:
+	Settings2Button() : Button(4) {}
+};
 
 #endif /* INC_BUTTONS_H_ */

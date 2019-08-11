@@ -10,24 +10,29 @@
 #include "stm32g0xx_ll_gpio.h"
 #include "main.h"
 
-void Buttons::initialize()
+Button::Button(uint32_t pin)
+{
+	mPin = pin;
+}
+
+void Button::initialize()
 {
 	setPinsToInterrupt();
 }
 
-void Buttons::shutdown()
+void Button::shutdown()
 {
 	setPinsToWakeup();
 }
 
-void Buttons::setPinsToWakeup()
+void Button::setPinsToWakeup()
 {
 	LL_PWR_EnableWakeUpPin(LL_PWR_WAKEUP_PIN1);
 	LL_PWR_EnableWakeUpPin(LL_PWR_WAKEUP_PIN2);
 	LL_PWR_EnableWakeUpPin(LL_PWR_WAKEUP_PIN4);
 }
 
-void Buttons::setPinsToInterrupt()
+void Button::setPinsToInterrupt()
 {
 	LL_EXTI_InitTypeDef EXTI_InitStruct = {0};
 
@@ -67,30 +72,26 @@ void Buttons::setPinsToInterrupt()
 	LL_GPIO_SetPinMode(SETTINGS2_GPIO_Port, SETTINGS2_Pin, LL_GPIO_MODE_INPUT);
 }
 
-Buttons::ButtonSource Buttons::getButtonsPressed()
+bool Button::getButtonPressed()
 {
-	Buttons::ButtonSource source = NONE;
-	source = source | LL_GPIO_IsInputPinSet(PUSHBUTTON_GPIO_Port, PUSHBUTTON_Pin) ? PUSHBUTTON : NONE;
-	source = source | LL_GPIO_IsInputPinSet(SETTINGS1_GPIO_Port, SETTINGS1_Pin) ? SETTINGSBUTTON1 : NONE;
-	source = source | LL_GPIO_IsInputPinSet(SETTINGS2_GPIO_Port, SETTINGS2_Pin) ? SETTINGSBUTTON2 : NONE;
-	return source;
+	return false;
 }
 
-bool Buttons::isWakeupFlagSet()
+bool Button::isWakeupFlagSet()
 {
 	if(LL_PWR_IsActiveFlag_WU1() || LL_PWR_IsActiveFlag_WU2() || LL_PWR_IsActiveFlag_WU4())
 		return true;
 	return false;
 }
 
-void Buttons::clearWakeupFlags()
+void Button::clearWakeupFlags()
 {
 	LL_PWR_ClearFlag_WU1();
 	LL_PWR_ClearFlag_WU2();
 	LL_PWR_ClearFlag_WU4();
 }
 
-void Buttons::handleInterrupt()
+void Button::handleInterrupt()
 {
 
 }
