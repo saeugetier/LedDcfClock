@@ -8,8 +8,17 @@
 #ifndef INC_POWERSUPERVISORTASK_H_
 #define INC_POWERSUPERVISORTASK_H_
 
+#include "Task.h"
 
-
+class PowerSupervisorTask : public Task
+{
+public:
+	PowerSupervisorTask();
+	virtual void run();
+	virtual void handleEvent(EventType::type event);
+protected:
+	virtual void taskModeChanged(TaskMode mode);
+};
 
 
 #endif /* INC_POWERSUPERVISORTASK_H_ */
