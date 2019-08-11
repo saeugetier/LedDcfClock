@@ -11,6 +11,7 @@
 #include "TaskManager.h"
 
 #include "Peripheral.h"
+#include "PeripheralReference.h"
 //Peripheral
 #include "SystemTick.h"
 #include "LedPowerEnable.h"
@@ -41,22 +42,6 @@ public:
 	};
 };
 
-template<class periph>
-class PeripheralReference: protected PeripheralInitializer
-{
-public:
-	PeripheralReference(periph& peripheral);
-	PeripheralReference(PeripheralReference& copy);
-	periph& getInstance() const;
-	void init();
-	void shutdown();
-	virtual ~PeripheralReference();
-protected:
-	bool mInitializationRequested = false;
-	static uint8_t mInitializationCounter;
-	periph& mReference;
-};
-
 class SystemManager
 {
 public:
@@ -69,7 +54,6 @@ public:
 	PeripheralReference<DcfWakeup> getDcfWakeupReference();
 	PeripheralReference<DcfPowerdown> getDcfPowerdownReference();
 	PeripheralReference<RtcClock> getClockReference();
-	PeripheralReference<Buttons> getButtonsReference();
 	PeripheralReference<StatusLed> getStatusLed1Reference();
 	PeripheralReference<StatusLed> getStatusLed2Reference();
 protected:
@@ -86,9 +70,10 @@ protected:
 	//Clock
 	RtcClock mClock;
 	//Common
-	Buttons mButtons;
 	StatusLed mLed1;
 	StatusLed mLed2;
+
+	PeripheralReference<PushButton> mPushButton = PushButton();
 
 	// Callbacks
 	TaskCallback<static_cast<EventType::type>(SystemEventType::DCF_PULSE)> mDcfPulseCallback;

@@ -7,58 +7,11 @@
 
 #include "SystemManager.h"
 
-template class PeripheralReference<SystemTick> ;
-
-template<class periph>
-uint8_t PeripheralReference<periph>::mInitializationCounter = 0;
-
-template<class periph>
-PeripheralReference<periph>::PeripheralReference(periph& peripheral) :
-		mInitializationRequested(false), mReference(peripheral)
-{
-}
-
-template<class periph>
-PeripheralReference<periph>::PeripheralReference(PeripheralReference& copy) :
-		mInitializationRequested(false), mReference(copy.mReference)
-{
-}
-
-template<class periph>
-void PeripheralReference<periph>::init()
-{
-	if (!mInitializationRequested)
-	{
-		if (mInitializationCounter == 0)
-			_init(mReference);
-		mInitializationCounter++;
-	}
-	mInitializationRequested = true;
-}
-
-template<class periph>
-void PeripheralReference<periph>::shutdown()
-{
-	if (mInitializationRequested)
-	{
-		mInitializationCounter--;
-		if (mInitializationCounter == 0)
-			_shutdown(mReference);
-	}
-	mInitializationRequested = false;
-}
-
-template<class periph>
-PeripheralReference<periph>::~PeripheralReference()
-{
-	shutdown();
-}
-
 SystemManager::SystemManager() :
 		mPulseDetector(false), mDcfPulseCallback(mTaskManager), mPowerSourceCallback(
 				mTaskManager), mDcfPowerDownCallback(mTaskManager), mDcfWakeUpCallback(
 				mTaskManager), mSysTickCallback(mTaskManager), mPowerSupplyCallback(
-				mTaskManager)
+				mTaskManager), mDcf77DecodeTask(mPulseDetector, mClock, mDcfWakeup, mDcfPowerdown)
 {
 	mPulseDetector.registerCallback(&mDcfPulseCallback);
 	mDcfWakeup.registerCallback(&mDcfWakeUpCallback);
@@ -110,12 +63,6 @@ PeripheralReference<DcfPowerdown> SystemManager::getDcfPowerdownReference()
 PeripheralReference<RtcClock> SystemManager::getClockReference()
 {
 	PeripheralReference<RtcClock> reference(mClock);
-	return reference;
-}
-
-PeripheralReference<Buttons> SystemManager::getButtonsReference()
-{
-	PeripheralReference<Buttons> reference(mButtons);
 	return reference;
 }
 
