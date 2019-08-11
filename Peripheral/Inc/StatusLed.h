@@ -10,7 +10,16 @@
 
 #include "Peripheral.h"
 
-class StatusLed : public Peripheral
+class StatusLed1 : public Peripheral
+{
+public:
+	void setLed(bool on);
+protected:
+	virtual void initialize();
+	virtual void shutdown();
+};
+
+class StatusLed2 : public Peripheral
 {
 public:
 	void setLed(bool on);

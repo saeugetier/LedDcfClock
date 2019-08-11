@@ -7,17 +7,32 @@
 
 #include <StatusLed.h>
 
-void StatusLed::initialize()
+void StatusLed1::initialize()
 {
 
 }
 
-void StatusLed::shutdown()
+void StatusLed1::shutdown()
 {
 
 }
 
-void StatusLed::setLed(bool on)
+void StatusLed1::setLed(bool on)
+{
+
+}
+
+void StatusLed2::initialize()
+{
+
+}
+
+void StatusLed2::shutdown()
+{
+
+}
+
+void StatusLed2::setLed(bool on)
 {
 
 }
