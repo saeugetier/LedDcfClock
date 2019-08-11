@@ -13,7 +13,9 @@
 class DcfWakeup : public InterruptPeripheral
 {
 public:
+	DcfWakeup();
 	void handleInterrupt();
+	void clearWakeupFlags();
 protected:
 	void initialize();
 	void shutdown();
