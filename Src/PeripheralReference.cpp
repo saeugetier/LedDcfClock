@@ -13,14 +13,21 @@
 #include "DcfWakeup.h"
 #include "Buttons.h"
 #include "StatusLed.h"
+#include "WS2812.h"
+#include "LedPowerEnable.h"
 
 template class PeripheralReference<SystemTick> ;
 template class PeripheralReference<PulseDetector> ;
 template class PeripheralReference<DcfPowerdown>;
 template class PeripheralReference<DcfWakeup> ;
-template class PeripheralReference<StatusLed> ;
+template class PeripheralReference<StatusLed1> ;
+template class PeripheralReference<StatusLed2> ;
 template class PeripheralReference<RtcClock> ;
 template class PeripheralReference<PushButton> ;
+template class PeripheralReference<Settings1Button> ;
+template class PeripheralReference<Settings2Button> ;
+template class PeripheralReference<WS2812<60+12>> ;
+template class PeripheralReference<LedPowerEnable> ;
 
 template<class periph>
 uint8_t PeripheralReference<periph>::mInitializationCounter = 0;
@@ -53,6 +60,12 @@ void PeripheralReference<periph>::init()
 		mInitializationCounter++;
 	}
 	mInitializationRequested = true;
+}
+
+template<class periph>
+periph& PeripheralReference<periph>::getInstance() const
+{
+	return mReference;
 }
 
 template<class periph>
