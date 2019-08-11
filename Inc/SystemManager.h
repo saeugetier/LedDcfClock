@@ -24,6 +24,8 @@
 #include "LedClockTask.h"
 #include "Dcf77DecodeTask.h"
 #include "StatusLed.h"
+#include "PowerSupervisorTask.h"
+#include "SettingsTask.h"
 
 class SystemEventType : public EventType
 {
@@ -47,33 +49,26 @@ class SystemManager
 public:
 	SystemManager();
 	void runTasks();
-	PeripheralReference<SystemTick> getSystemTickReference();
-	PeripheralReference<WS2812<60+12>> getWS2812Reference();
-	PeripheralReference<LedPowerEnable> getLedPowerEnableReference();
-	PeripheralReference<PulseDetector> getPulseDetector();
-	PeripheralReference<DcfWakeup> getDcfWakeupReference();
-	PeripheralReference<DcfPowerdown> getDcfPowerdownReference();
-	PeripheralReference<RtcClock> getClockReference();
-	PeripheralReference<StatusLed> getStatusLed1Reference();
-	PeripheralReference<StatusLed> getStatusLed2Reference();
 protected:
 	TaskManager mTaskManager;
 	//Peripherals
 	//LED
-	SystemTick mSystemTick;
-	WS2812<60+12> mWS2812;
-	LedPowerEnable mLedPowerEnable;
+	PeripheralReference<SystemTick> mSystemTick = SystemTick();
+	PeripheralReference<WS2812<60+12>> mWS2812 = WS2812<60+12>();
+	PeripheralReference<LedPowerEnable> mLedPowerEnable = LedPowerEnable();
 	//DCF
-	PulseDetector mPulseDetector;
-	DcfWakeup mDcfWakeup;
-	DcfPowerdown mDcfPowerdown;
+	PeripheralReference<PulseDetector> mPulseDetector = PulseDetector(false);
+	PeripheralReference<DcfWakeup> mDcfWakeup = DcfWakeup();
+	PeripheralReference<DcfPowerdown> mDcfPowerdown = DcfPowerdown();
 	//Clock
-	RtcClock mClock;
+	PeripheralReference<RtcClock> mClock = RtcClock();
 	//Common
-	StatusLed mLed1;
-	StatusLed mLed2;
+	PeripheralReference<StatusLed1> mLed1 = StatusLed1();
+	PeripheralReference<StatusLed2> mLed2 = StatusLed2();
 
 	PeripheralReference<PushButton> mPushButton = PushButton();
+	PeripheralReference<Settings1Button> mSettings1Button = Settings1Button();
+	PeripheralReference<Settings2Button> mSettings2Button = Settings2Button();
 
 	// Callbacks
 	TaskCallback<static_cast<EventType::type>(SystemEventType::DCF_PULSE)> mDcfPulseCallback;
@@ -85,6 +80,8 @@ protected:
 	// Tasks
 	LedClockTask mLedClockTask;
 	Dcf77DecodeTask mDcf77DecodeTask;
+	PowerSupervisorTask mPowerSupervisorTask;
+
 };
 
 #endif /* INC_SYSTEMMANAGER_H_ */
