@@ -15,18 +15,25 @@
 class Button : public InterruptPeripheral
 {
 public:
-	Button(uint32_t pin);
+	enum ButtonPin : uint32_t
+	{
+		PUSH_BUTTON_PIN,
+		SETTINGS1_BUTTON_PIN,
+		SETTINGS2_BUTTON_PIN
+	};
+
+	Button(ButtonPin pin);
 
 	bool getButtonPressed();
 
 	void handleInterrupt();
 
-	void setPinsToWakeup();
-	void setPinsToInterrupt();
+	void disableInterrupt();
+	void setPinToInterrupt();
 	bool isWakeupFlagSet();
-	void clearWakeupFlags();
+	void clearWakeupFlag();
 protected:
-	uint32_t mPin;
+	ButtonPin mPin;
 	void initialize();
 	void shutdown();
 };
@@ -34,20 +41,20 @@ protected:
 class PushButton : public Button
 {
 public:
-	PushButton() : Button(0) {}
+	PushButton() : Button(PUSH_BUTTON_PIN) {}
 
 };
 
 class Settings1Button : public Button
 {
 public:
-	Settings1Button() : Button(2) {	}
+	Settings1Button() : Button(SETTINGS1_BUTTON_PIN) {	}
 };
 
 class Settings2Button : public Button
 {
 public:
-	Settings2Button() : Button(4) {}
+	Settings2Button() : Button(SETTINGS2_BUTTON_PIN) {}
 };
 
 #endif /* INC_BUTTONS_H_ */
