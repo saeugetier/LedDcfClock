@@ -8,8 +8,10 @@
 #include "Dcf77DecodeTask.h"
 #include "SystemManager.h"
 
-Dcf77DecodeTask::Dcf77DecodeTask(PulseDetector& detector, RtcClock& clock,
-		DcfWakeup& wake, DcfPowerdown& power) :
+Dcf77DecodeTask::Dcf77DecodeTask(PeripheralReference<PulseDetector> detector,
+		PeripheralReference<RtcClock> clock,
+		PeripheralReference<DcfWakeup> wake,
+		PeripheralReference<DcfPowerdown> power) :
 		mPulseDetector(detector), mDcfWakeup(wake), mPowerDown(power), mRtcClock(
 				clock)
 {
@@ -24,7 +26,7 @@ void Dcf77DecodeTask::run()
 
 void Dcf77DecodeTask::handleEvent(EventType::type event)
 {
-	switch(event)
+	switch (event)
 	{
 	case SystemEventType::type::DCF_WAKE_UP:
 		break;
