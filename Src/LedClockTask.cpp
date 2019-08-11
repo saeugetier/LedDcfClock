@@ -7,6 +7,12 @@
 
 #include "LedClockTask.h"
 
+LedClockTask::LedClockTask(PeripheralReference<RtcClock> clock,
+		PeripheralReference<WS2812<60 + 12>> leds,
+		PeripheralReference<PushButton> button)
+{
+	mMode = TaskMode::SLEEP;
+}
 
 void LedClockTask::run()
 {
