@@ -81,7 +81,6 @@ protected:
 	LedClockTask mLedClockTask;
 	Dcf77DecodeTask mDcf77DecodeTask;
 	PowerSupervisorTask mPowerSupervisorTask;
-
 };
 
 #endif /* INC_SYSTEMMANAGER_H_ */

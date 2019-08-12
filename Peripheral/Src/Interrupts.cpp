@@ -19,7 +19,8 @@ extern "C"
 {
 void TIM1_CC_IRQHandler(void)
 {
-	PulseDetector::getInstance()->handleInterrupt();
+	if(PulseDetector::getInstance() != nullptr)
+		PulseDetector::getInstance()->handleInterrupt();
 }
 }
 
@@ -27,7 +28,8 @@ extern "C"
 {
 void SysTick_Handler()
 {
-	SystemTick::getInstance()->handleInterrupt();
+	if(SystemTick::getInstance() != nullptr)
+		SystemTick::getInstance()->handleInterrupt();
 }
 }
 
@@ -37,7 +39,8 @@ void EXTI0_1_IRQHandler()
 {
 	if (LL_EXTI_IsActiveFallingFlag_0_31(LL_EXTI_LINE_0))
 	{
-		Button::getInstance()->handleInterrupt();
+		if(PushButton::getInstance() != nullptr)
+			PushButton::getInstance()->handleInterrupt();
 		LL_EXTI_ClearFallingFlag_0_31(LL_EXTI_LINE_0);
 	}
 }
@@ -49,7 +52,8 @@ void EXTI2_3_IRQHandler()
 {
 	if (LL_EXTI_IsActiveFallingFlag_0_31(LL_EXTI_LINE_2))
 	{
-		Button::getInstance()->handleInterrupt();
+		if(Settings1Button::getInstance() != nullptr)
+			Settings1Button::getInstance()->handleInterrupt();
 		LL_EXTI_ClearFallingFlag_0_31(LL_EXTI_LINE_2);
 	}
 }
@@ -62,17 +66,20 @@ void EXTI4_15_IRQHandler()
 
 	if (LL_EXTI_IsActiveFallingFlag_0_31(LL_EXTI_LINE_4)) //Buttons react on falling edges
 	{
-		Button::getInstance()->handleInterrupt();
+		if(Settings2Button::getInstance() != nullptr)
+			Settings2Button::getInstance()->handleInterrupt();
 		LL_EXTI_ClearFallingFlag_0_31(LL_EXTI_LINE_4);
 	}
 	else if(LL_EXTI_IsActiveRisingFlag_0_31(LL_EXTI_LINE_4)) //Dcf Powerdown reacts on rising edges
 	{
-		DcfPowerdown::getInstance()->handleInterrupt();
+		if(DcfPowerdown::getInstance() != nullptr)
+			DcfPowerdown::getInstance()->handleInterrupt();
 		LL_EXTI_ClearRisingFlag_0_31(LL_EXTI_LINE_4);
 	}
 	else if(LL_EXTI_IsActiveRisingFlag_0_31(LL_EXTI_LINE_5))
 	{
-		DcfWakeup::getInstance()->handleInterrupt();
+		if(DcfWakeup::getInstance() != nullptr)
+			DcfWakeup::getInstance()->handleInterrupt();
 		LL_EXTI_ClearRisingFlag_0_31(LL_EXTI_LINE_5);
 	}
 }

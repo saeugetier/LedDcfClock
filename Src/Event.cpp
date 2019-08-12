@@ -7,7 +7,7 @@
 
 #include "Event.h"
 
-Event::Event(Task* task)
+Event::Event(Task* task,  EventType::type type) : mType(type)
 {
 	mTask = task;
 }

@@ -37,7 +37,7 @@ extern "C"
 }
 
 
-SystemManager manager;
+
 
 int main(void)
 {
@@ -63,6 +63,8 @@ int main(void)
 
   LL_GPIO_ResetOutputPin(LED1_GPIO_Port, LED1_Pin);
   LL_GPIO_SetOutputPin(LED2_GPIO_Port, LED2_Pin);
+
+  SystemManager manager;
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */

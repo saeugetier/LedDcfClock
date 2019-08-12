@@ -15,7 +15,7 @@
 class Event
 {
 public:
-	Event(Task* listener);
+	Event(Task* listener, EventType::type type);
 	EventType::type getType() const;
 	void operator()();
 protected:
