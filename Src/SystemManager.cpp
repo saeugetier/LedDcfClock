@@ -24,6 +24,10 @@ SystemManager::SystemManager() :
 	mTaskManager.addTask(&mLedClockTask);
 
 	mTaskManager.addEvent(&(mLedClockTask.getTickEvent()));
+
+	mTaskManager.addEvent(&(mDcf77DecodeTask.getWakeupEvent()));
+	mTaskManager.addEvent(&(mDcf77DecodeTask.getPowerdownEvent()));
+	mTaskManager.addEvent(&(mDcf77DecodeTask.getPulseEvent()));
 }
 
 void SystemManager::runTasks()
