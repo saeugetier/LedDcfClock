@@ -339,6 +339,11 @@ time_t DCF77::getUTCTime(void)
 	}
 }
 
+uint16_t DCF77::getMedianSubsecond()
+{
+	return medianSubsecond;
+}
+
 int32_t DCF77::getSummerTime(void)
 {
   return (CEST)?1:0;

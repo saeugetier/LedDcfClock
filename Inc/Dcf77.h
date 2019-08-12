@@ -86,9 +86,9 @@ public:
     DCF77(RtcClock* _clock, bool OnRisingFlank=true);
 
     time_t getTime(void);
+    uint16_t getMedianSubsecond();
     time_t getUTCTime(void);
 
-    //static void int0handler();
     int32_t getSummerTime();
 
     void decode(uint32_t risingEdge, uint32_t fallingEdge);
