@@ -33,9 +33,6 @@ void DcfWakeup::initialize()
 
 	LL_EXTI_SetEXTISource(LL_EXTI_CONFIG_PORTB, LL_EXTI_CONFIG_LINE5);
 
-	LL_EXTI_EnableIT_0_31(LL_EXTI_LINE_5);
-	LL_EXTI_EnableRisingTrig_0_31(LL_EXTI_LINE_5);
-
 	NVIC_EnableIRQ (EXTI4_15_IRQn);
 	NVIC_SetPriority(EXTI4_15_IRQn, 0);
 }
