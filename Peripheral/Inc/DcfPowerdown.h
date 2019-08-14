@@ -10,9 +10,10 @@
 
 #include "Peripheral.h"
 
-class DcfPowerdown : public InterruptPeripheral
+class DcfPowerdown : public InterruptPeripheral<DcfPowerdown>
 {
 public:
+	DcfPowerdown();
 	void handleInterrupt();
 protected:
 	void initialize();

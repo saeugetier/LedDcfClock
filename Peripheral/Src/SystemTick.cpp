@@ -8,6 +8,14 @@
 #include "SystemTick.h"
 #include "main.h"
 
+template<>
+SystemTick* InterruptPeripheral<SystemTick>::mPeripheralInstance = nullptr;
+
+SystemTick::SystemTick()
+{
+	mPeripheralInstance = this;
+}
+
 void SystemTick::initialize()
 {
 	LL_SYSTICK_EnableIT();

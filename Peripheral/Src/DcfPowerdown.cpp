@@ -7,6 +7,14 @@
 
 #include "DcfPowerdown.h"
 
+template<>
+DcfPowerdown* InterruptPeripheral<DcfPowerdown>::mPeripheralInstance = nullptr;
+
+DcfPowerdown::DcfPowerdown()
+{
+	mPeripheralInstance = this;
+}
+
 void DcfPowerdown::initialize()
 {
 

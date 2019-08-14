@@ -7,6 +7,14 @@
 
 #include "PowerSource.h"
 
+template<>
+PowerSource* InterruptPeripheral<PowerSource>::mPeripheralInstance = nullptr;
+
+PowerSource::PowerSource()
+{
+	mPeripheralInstance = this;
+}
+
 void PowerSource::initialize()
 {
 

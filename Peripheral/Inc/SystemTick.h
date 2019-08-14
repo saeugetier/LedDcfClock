@@ -10,9 +10,10 @@
 
 #include "Peripheral.h"
 
-class SystemTick : public InterruptPeripheral
+class SystemTick : public InterruptPeripheral<SystemTick>
 {
 public:
+	SystemTick();
 	void handleInterrupt();
 protected:
 	virtual void initialize();

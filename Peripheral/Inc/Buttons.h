@@ -12,49 +12,52 @@
 #include "Peripheral.h"
 #include "Callback.h"
 
-class Button : public InterruptPeripheral
+class Button
 {
 public:
-	enum ButtonPin : uint32_t
-	{
-		PUSH_BUTTON_PIN,
-		SETTINGS1_BUTTON_PIN,
-		SETTINGS2_BUTTON_PIN
-	};
+	virtual bool getButtonPressed() = 0;
+	virtual bool isWakeupFlagSet() = 0;
+	virtual void clearWakeupFlag() = 0;
+};
 
-	Button(ButtonPin pin);
-
+class PushButton : public Button, public InterruptPeripheral<PushButton>
+{
+public:
+	PushButton();
 	bool getButtonPressed();
-
-	void handleInterrupt();
-
-	void disableInterrupt();
-	void setPinToInterrupt();
 	bool isWakeupFlagSet();
 	void clearWakeupFlag();
+	void handleInterrupt();
 protected:
-	ButtonPin mPin;
 	void initialize();
 	void shutdown();
 };
 
-class PushButton : public Button
+class Settings1Button : public Button, public InterruptPeripheral<Settings1Button>
 {
 public:
-	PushButton() : Button(PUSH_BUTTON_PIN) {}
-
+	Settings1Button();
+	bool getButtonPressed();
+	bool isWakeupFlagSet();
+	void clearWakeupFlag();
+	void handleInterrupt();
+protected:
+	void initialize();
+	void shutdown();
 };
 
-class Settings1Button : public Button
+class Settings2Button : public Button, public InterruptPeripheral<Settings2Button>
 {
 public:
-	Settings1Button() : Button(SETTINGS1_BUTTON_PIN) {	}
-};
+	Settings2Button();
 
-class Settings2Button : public Button
-{
-public:
-	Settings2Button() : Button(SETTINGS2_BUTTON_PIN) {}
+	bool getButtonPressed();
+	bool isWakeupFlagSet();
+	void clearWakeupFlag();
+	void handleInterrupt();
+protected:
+	void initialize();
+	void shutdown();
 };
 
 #endif /* INC_BUTTONS_H_ */

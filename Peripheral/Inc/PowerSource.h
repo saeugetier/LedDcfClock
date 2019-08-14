@@ -10,9 +10,10 @@
 
 #include "Peripheral.h"
 
-class PowerSource : public InterruptPeripheral
+class PowerSource : public InterruptPeripheral<PowerSource>
 {
 protected:
+	PowerSource();
 	virtual void initialize();
 	virtual void shutdown();
 public:

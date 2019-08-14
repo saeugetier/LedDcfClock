@@ -2,8 +2,12 @@
 #include "main.h"
 #include <cstddef>
 
+template<>
+PulseDetector* InterruptPeripheral<PulseDetector>::mPeripheralInstance = nullptr;
+
 PulseDetector::PulseDetector(bool SyncOnRisingFlank) : mPulseCallback(0)
 {
+	mPeripheralInstance = this;
 	mSyncOnRisingFlank = SyncOnRisingFlank;
 }
 

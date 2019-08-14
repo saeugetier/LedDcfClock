@@ -10,7 +10,7 @@
 
 #include "Peripheral.h"
 
-class DcfWakeup : public InterruptPeripheral
+class DcfWakeup : public InterruptPeripheral<DcfWakeup>
 {
 public:
 	DcfWakeup();
