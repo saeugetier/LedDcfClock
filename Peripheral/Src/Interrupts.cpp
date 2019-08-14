@@ -13,6 +13,7 @@
 #include "DcfWakeup.h"
 #include "SystemTick.h"
 #include "Buttons.h"
+#include "PowerSource.h"
 
 //using extern "C" to get the right function reference -- ABI changed for C++ function calls
 extern "C"
@@ -43,6 +44,14 @@ void EXTI0_1_IRQHandler()
 			PushButton::getInstance()->handleInterrupt();
 		LL_EXTI_ClearFallingFlag_0_31(LL_EXTI_LINE_0);
 	}
+	if (LL_EXTI_IsActiveRisingFlag_0_31(LL_EXTI_LINE_1) || LL_EXTI_IsActiveFallingFlag_0_31(LL_EXTI_LINE_1))
+	{
+		if(PowerSource::getInstance() != nullptr)
+			PowerSource::getInstance()->handleInterrupt();
+
+		LL_EXTI_ClearFallingFlag_0_31(LL_EXTI_LINE_1);
+		LL_EXTI_ClearRisingFlag_0_31(LL_EXTI_LINE_1);
+	}
 }
 }
 
@@ -63,6 +72,7 @@ extern "C"
 {
 void EXTI4_15_IRQHandler()
 {
+	// @TODO: EXTI_LINE_4 is used double. Proper handling has to be implemented
 
 	if (LL_EXTI_IsActiveFallingFlag_0_31(LL_EXTI_LINE_4)) //Buttons react on falling edges
 	{
@@ -70,7 +80,7 @@ void EXTI4_15_IRQHandler()
 			Settings1Button::getInstance()->handleInterrupt();
 		LL_EXTI_ClearFallingFlag_0_31(LL_EXTI_LINE_4);
 	}
-	else if(LL_EXTI_IsActiveRisingFlag_0_31(LL_EXTI_LINE_4)) //Dcf Powerdown reacts on rising edges
+	if(LL_EXTI_IsActiveRisingFlag_0_31(LL_EXTI_LINE_4)) //Dcf Powerdown reacts on rising edges
 	{
 		if(DcfPowerdown::getInstance() != nullptr)
 			DcfPowerdown::getInstance()->handleInterrupt();
