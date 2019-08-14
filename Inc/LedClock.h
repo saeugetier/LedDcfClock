@@ -8,7 +8,7 @@
 #ifndef INC_LEDCLOCK_H_
 #define INC_LEDCLOCK_H_
 
-#include "main.h"
+#include "PeripheralReference.h"
 #include "WS2812.h"
 #include "LedPowerEnable.h"
 #include "Settings.h"
@@ -21,17 +21,17 @@ public:
 		TIME_NOT_SET,
 		HARDWARE_FAULT
 	};
-	LedClock(Settings* settings);
+	LedClock(PeripheralReference<WS2812<60 + 12>> leds, PeripheralReference<LedPowerEnable> power);
 	~LedClock();
-	void enable(bool enable);
 	void displayTime(const tm &time, bool displaySeconds  = false, uint8_t subsecond = 0);
 	void displayError(Error error);
 	void setPower(bool on);
 	bool isReady();
+	void setBrightness(uint8_t brightness);
 protected:
-	WS2812<60 + 12> mLeds;
-	//LedPowerEnable mLedPowerEnable;
-	Settings* mSettings;
+	PeripheralReference<WS2812<60 + 12>> mLeds;
+	PeripheralReference<LedPowerEnable> mPowerEnable;
+	uint8_t mBrightness;
 };
 
 

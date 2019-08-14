@@ -15,7 +15,7 @@ SystemManager::SystemManager() :
 		mDcfWakeUpCallback(mTaskManager),
 		mSysTickCallback(mTaskManager),
 		mPowerSupplyCallback(mTaskManager),
-		mLedClockTask(mClock, mWS2812, mPushButton, mSystemTick, mSettings),
+		mLedClockTask(mClock, mWS2812, mPushButton, mSystemTick, mLedPowerEnable, mSettings),
 		mDcf77DecodeTask(mPulseDetector, mClock, mDcfWakeup, mDcfPowerdown)
 {
 	mPulseDetector.getInstance().registerCallback(&mDcfPulseCallback);

@@ -7,81 +7,69 @@
 
 #include "LedClock.h"
 
-LedClock::LedClock(Settings* settings)
+LedClock::LedClock(PeripheralReference<WS2812<60 + 12>> leds, PeripheralReference<LedPowerEnable> power) :
+	mLeds(leds), mPowerEnable(power), mBrightness(255)
 {
-	mSettings = settings;
 }
 
 LedClock::~LedClock()
 {
-	enable(false);
-}
-
-void LedClock::enable(bool enable)
-{
-	if(enable)
-	{
-		//mLedPowerEnable.initialize();
-		//mLeds.initialize();
-	}
-	else
-	{
-		setPower(false);
-		//mLedPowerEnable.shutdown();
-		//mLeds.shutdown();
-	}
+	setPower(false);
 }
 
 void LedClock::displayTime(const tm &time, bool displaySeconds, uint8_t subsecond)
 {
-	mLeds.clearBuffer();
+	mLeds.getInstance().clearBuffer();
 
 	//correct phase by 180°
 	int second = (time.tm_sec  + 30) % 60;
 	int minute = (time.tm_min + 30) % 60;
 	int hour = (time.tm_hour + 6) % 12;
 
-	uint8_t brightness = mSettings->getBrightness();
-
 	if(subsecond > 128)
 		subsecond = 128;
 
-	int brightness_subsecond = ((int)subsecond * brightness) / 128;
+	int brightness_subsecond = ((int)subsecond * mBrightness) / 128;
 
 	//second and minutes are using the inner LEDs
-	mLeds.setPixelColor(RGB(0,0,brightness_subsecond), second);
-	mLeds.setPixelColor(RGB(0,0,brightness-brightness_subsecond), (second + 1) % 60);
-	mLeds.setPixelColor(RGB(brightness,0,mLeds.getPixelColor(minute).b), minute);
+	mLeds.getInstance().setPixelColor(RGB(0,0,brightness_subsecond), second);
+	mLeds.getInstance().setPixelColor(RGB(0,0,mBrightness-brightness_subsecond), (second + 1) % 60);
+	mLeds.getInstance().setPixelColor(RGB(mBrightness,0,mLeds.getInstance().getPixelColor(minute).b), minute);
 	//hours using the uppper LED ring
-	mLeds.setPixelColor(RGB(0,brightness,0), 60 + hour);
-	mLeds.showLeds();
+	mLeds.getInstance().setPixelColor(RGB(0,mBrightness,0), 60 + hour);
+	mLeds.getInstance().showLeds();
 }
 
 
 void LedClock::setPower(bool on)
 {
-	//mLedPowerEnable.setPower(on);
+	mPowerEnable.getInstance().setPower(on);
 }
 
 bool LedClock::isReady()
 {
-	return !mLeds.isBusy();
+	return !mLeds.getInstance().isBusy();
 }
 
 void LedClock::displayError(Error error)
 {
-	mLeds.clearBuffer();
+	mLeds.getInstance().clearBuffer();
 	if(error == Error::HARDWARE_FAULT)
 	{
-		mLeds.setPixelColor(RGB(0,255,255), 0);
-		mLeds.setPixelColor(RGB(0,255,255), 1);
-		mLeds.setPixelColor(RGB(0,255,255), 2);
+		mLeds.getInstance().setPixelColor(RGB(0,255,255), 0);
+		mLeds.getInstance().setPixelColor(RGB(0,255,255), 1);
+		mLeds.getInstance().setPixelColor(RGB(0,255,255), 2);
 	}
 	else if(error == Error::TIME_NOT_SET)
 	{
-		mLeds.setPixelColor(RGB(255,255,0), 0);
-		mLeds.setPixelColor(RGB(255,255,0), 1);
-		mLeds.setPixelColor(RGB(255,255,0), 2);
+		mLeds.getInstance().setPixelColor(RGB(255,255,0), 0);
+		mLeds.getInstance().setPixelColor(RGB(255,255,0), 1);
+		mLeds.getInstance().setPixelColor(RGB(255,255,0), 2);
 	}
-	mLeds.showLeds();
+	mLeds.getInstance().showLeds();
+}
+
+void LedClock::setBrightness(uint8_t brightness)
+{
+	mBrightness = brightness;
 }
