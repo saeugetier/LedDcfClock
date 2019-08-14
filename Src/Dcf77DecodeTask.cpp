@@ -27,6 +27,7 @@ Dcf77DecodeTask::Dcf77DecodeTask(PeripheralReference<PulseDetector> detector,
 void Dcf77DecodeTask::run()
 {
 	time_t time = mDcfDecoder.getTime();
+	// time != 0 when new timestamp is available
 	if(time != 0)
 	{
 		if(!mRtcClock.getInstance().isClockSet())
@@ -61,15 +62,17 @@ void Dcf77DecodeTask::taskModeChanged(TaskMode mode)
 	switch(mode)
 	{
 	case TaskMode::SLEEP:
-		mDcfPowerDown.init();
 		mDcfWakeup.shutdown();
+		mRtcClock.init();
+		mDcfPowerDown.init();
 		mPulseDetector.init();
 		break;
 	default:
 	case TaskMode::DEEPSLEEP:
-		mDcfWakeup.init();
 		mDcfPowerDown.shutdown();
 		mPulseDetector.shutdown();
+		mRtcClock.shutdown();
+		mDcfWakeup.init();
 		break;
 
 	}
