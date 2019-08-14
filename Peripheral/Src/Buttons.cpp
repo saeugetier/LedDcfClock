@@ -55,10 +55,15 @@ void PushButton::initialize()
 	EXTI_InitStruct.Line_0_31 = LL_EXTI_LINE_0;
 	EXTI_InitStruct.LineCommand = ENABLE;
 	EXTI_InitStruct.Mode = LL_EXTI_MODE_IT;
-	EXTI_InitStruct.Trigger = LL_EXTI_TRIGGER_RISING;
+	EXTI_InitStruct.Trigger = LL_EXTI_TRIGGER_FALLING;
 	LL_EXTI_Init(&EXTI_InitStruct);
 	LL_GPIO_SetPinPull(PUSHBUTTON_GPIO_Port, PUSHBUTTON_Pin, LL_GPIO_PULL_NO);
 	LL_GPIO_SetPinMode(PUSHBUTTON_GPIO_Port, PUSHBUTTON_Pin, LL_GPIO_MODE_INPUT);
+
+	LL_EXTI_SetEXTISource(LL_EXTI_CONFIG_PORTA, LL_EXTI_CONFIG_LINE0);
+
+	NVIC_EnableIRQ (EXTI0_1_IRQn);
+	NVIC_SetPriority(EXTI0_1_IRQn, 0);
 }
 
 void PushButton::shutdown()
@@ -103,10 +108,15 @@ void Settings1Button::initialize()
 	EXTI_InitStruct.Line_0_31 = LL_EXTI_LINE_4;
 	EXTI_InitStruct.LineCommand = ENABLE;
 	EXTI_InitStruct.Mode = LL_EXTI_MODE_IT;
-	EXTI_InitStruct.Trigger = LL_EXTI_TRIGGER_RISING;
+	EXTI_InitStruct.Trigger = LL_EXTI_TRIGGER_FALLING;
 	LL_EXTI_Init(&EXTI_InitStruct);
 	LL_GPIO_SetPinPull(SETTINGS1_GPIO_Port, SETTINGS1_Pin, LL_GPIO_PULL_NO);
 	LL_GPIO_SetPinMode(SETTINGS1_GPIO_Port, SETTINGS1_Pin, LL_GPIO_MODE_INPUT);
+
+	LL_EXTI_SetEXTISource(LL_EXTI_CONFIG_PORTA, LL_EXTI_CONFIG_LINE4);
+
+	NVIC_EnableIRQ (EXTI4_15_IRQn);
+	NVIC_SetPriority(EXTI4_15_IRQn, 0);
 }
 
 void Settings1Button::shutdown()
@@ -151,10 +161,15 @@ void Settings2Button::initialize()
 	EXTI_InitStruct.Line_0_31 = LL_EXTI_LINE_2;
 	EXTI_InitStruct.LineCommand = ENABLE;
 	EXTI_InitStruct.Mode = LL_EXTI_MODE_IT;
-	EXTI_InitStruct.Trigger = LL_EXTI_TRIGGER_RISING;
+	EXTI_InitStruct.Trigger = LL_EXTI_TRIGGER_FALLING;
 	LL_EXTI_Init(&EXTI_InitStruct);
 	LL_GPIO_SetPinPull(SETTINGS2_GPIO_Port, SETTINGS2_Pin, LL_GPIO_PULL_NO);
 	LL_GPIO_SetPinMode(SETTINGS2_GPIO_Port, SETTINGS2_Pin, LL_GPIO_MODE_INPUT);
+
+	LL_EXTI_SetEXTISource(LL_EXTI_CONFIG_PORTA, LL_EXTI_CONFIG_LINE2);
+
+	NVIC_EnableIRQ (EXTI2_3_IRQn);
+	NVIC_SetPriority(EXTI2_3_IRQn, 0);
 }
 
 void Settings2Button::shutdown()
