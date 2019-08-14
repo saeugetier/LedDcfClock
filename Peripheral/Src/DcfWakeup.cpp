@@ -37,7 +37,7 @@ void DcfWakeup::initialize()
 
 void DcfWakeup::shutdown()
 {
-
+	LL_GPIO_SetPinMode(DCF_IN_GPIO_Port, DCF_IN_Pin, LL_GPIO_MODE_ANALOG);
 }
 
 void DcfWakeup::handleInterrupt()
