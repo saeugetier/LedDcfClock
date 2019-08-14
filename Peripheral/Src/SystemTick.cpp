@@ -28,5 +28,6 @@ void SystemTick::shutdown()
 
 void SystemTick::handleInterrupt()
 {
-
+	if(mCallback != nullptr)
+		mCallback->notify();
 }
