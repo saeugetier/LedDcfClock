@@ -22,7 +22,7 @@ void DcfWakeup::initialize()
 {
 	LL_IOP_GRP1_EnableClock(LL_IOP_GRP1_PERIPH_GPIOB);
 	LL_EXTI_InitTypeDef EXTI_InitStruct = { 0 };
-	LL_EXTI_SetEXTISource(LL_EXTI_CONFIG_PORTA, LL_EXTI_CONFIG_LINE5);
+	LL_EXTI_SetEXTISource(LL_EXTI_CONFIG_PORTB, LL_EXTI_CONFIG_LINE5);
 	EXTI_InitStruct.Line_0_31 = LL_EXTI_LINE_5;
 	EXTI_InitStruct.LineCommand = ENABLE;
 	EXTI_InitStruct.Mode = LL_EXTI_MODE_IT;
@@ -30,8 +30,6 @@ void DcfWakeup::initialize()
 	LL_EXTI_Init(&EXTI_InitStruct);
 	LL_GPIO_SetPinPull(DCF_IN_GPIO_Port, DCF_IN_Pin, LL_GPIO_PULL_NO);
 	LL_GPIO_SetPinMode(DCF_IN_GPIO_Port, DCF_IN_Pin, LL_GPIO_MODE_INPUT);
-
-	LL_EXTI_SetEXTISource(LL_EXTI_CONFIG_PORTB, LL_EXTI_CONFIG_LINE5);
 
 	NVIC_EnableIRQ (EXTI4_15_IRQn);
 	NVIC_SetPriority(EXTI4_15_IRQn, 0);
