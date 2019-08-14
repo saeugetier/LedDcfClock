@@ -33,7 +33,8 @@ void PushButton::clearWakeupFlag()
 
 void PushButton::handleInterrupt()
 {
-	mCallback->notify();
+	if(mCallback != nullptr)
+		mCallback->notify();
 }
 
 bool PushButton::isWakeupFlagSet()
@@ -84,7 +85,8 @@ void Settings1Button::clearWakeupFlag()
 
 void Settings1Button::handleInterrupt()
 {
-	mCallback->notify();
+	if(mCallback != nullptr)
+		mCallback->notify();
 }
 
 bool Settings1Button::isWakeupFlagSet()
@@ -106,7 +108,7 @@ void Settings1Button::initialize()
 	EXTI_InitStruct.Line_0_31 = LL_EXTI_LINE_4;
 	EXTI_InitStruct.LineCommand = ENABLE;
 	EXTI_InitStruct.Mode = LL_EXTI_MODE_IT;
-	EXTI_InitStruct.Trigger = LL_EXTI_TRIGGER_FALLING;
+	EXTI_InitStruct.Trigger = LL_EXTI_TRIGGER_RISING_FALLING;
 	LL_EXTI_Init(&EXTI_InitStruct);
 	LL_GPIO_SetPinPull(SETTINGS1_GPIO_Port, SETTINGS1_Pin, LL_GPIO_PULL_NO);
 	LL_GPIO_SetPinMode(SETTINGS1_GPIO_Port, SETTINGS1_Pin, LL_GPIO_MODE_INPUT);
@@ -135,7 +137,8 @@ void Settings2Button::clearWakeupFlag()
 
 void Settings2Button::handleInterrupt()
 {
-	mCallback->notify();
+	if(mCallback != nullptr)
+		mCallback->notify();
 }
 
 bool Settings2Button::isWakeupFlagSet()
