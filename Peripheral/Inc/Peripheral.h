@@ -30,15 +30,16 @@ protected:
 	virtual void shutdown() = 0;
 };
 
+template <class Periph>
 class InterruptPeripheral : public Peripheral
 {
 public:
-	void registerCallback(Callback* callback);
+	void registerCallback(Callback* callback) { mCallback = callback; }
 	virtual void handleInterrupt() = 0;
-	static InterruptPeripheral* getInstance();
+	static Periph* getInstance() { return mPeripheralInstance;	}
 protected:
 	Callback* mCallback;
-	static InterruptPeripheral* mPeripheralInstance;
+	static Periph* mPeripheralInstance;
 };
 
 #endif /* PERIPHERAL_INC_PERIPHERAL_H_ */
