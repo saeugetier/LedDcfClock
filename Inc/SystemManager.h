@@ -40,7 +40,9 @@ public:
 		DMA_BUFFER_EMPTY,
 		POWER_SOURCE_CHANGED,
 		SUPPLY_VOLTAGE_LEVEL,
-		BUTTON_EVENT
+		PUSH_BUTTON_EVENT,
+		SETTINGS1_BUTTON_EVENT,
+		SETTINGS2_BUTTON_EVENT
 	};
 };
 
@@ -81,6 +83,8 @@ protected:
 	LedClockTask mLedClockTask;
 	Dcf77DecodeTask mDcf77DecodeTask;
 	PowerSupervisorTask mPowerSupervisorTask;
+
+	Settings mSettings;
 };
 
 #endif /* INC_SYSTEMMANAGER_H_ */

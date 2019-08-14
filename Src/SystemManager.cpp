@@ -15,13 +15,13 @@ SystemManager::SystemManager() :
 		mDcfWakeUpCallback(mTaskManager),
 		mSysTickCallback(mTaskManager),
 		mPowerSupplyCallback(mTaskManager),
-		mLedClockTask(mClock, mWS2812, mPushButton, mSystemTick),
+		mLedClockTask(mClock, mWS2812, mPushButton, mSystemTick, mSettings),
 		mDcf77DecodeTask(mPulseDetector, mClock, mDcfWakeup, mDcfPowerdown)
 {
 	mPulseDetector.getInstance().registerCallback(&mDcfPulseCallback);
 	mDcfWakeup.getInstance().registerCallback(&mDcfWakeUpCallback);
-	mDcfPowerdown.getInstance().registerCallback(&mDcfPowerDownCallback);
 	mSystemTick.getInstance().registerCallback(&mSysTickCallback);
+	mDcfPowerdown.getInstance().registerCallback(&mDcfPowerDownCallback);
 
 	mTaskManager.addTask(&mDcf77DecodeTask);
 	mTaskManager.addTask(&mLedClockTask);
@@ -31,6 +31,9 @@ SystemManager::SystemManager() :
 	mTaskManager.addEvent(&(mDcf77DecodeTask.getWakeupEvent()));
 	mTaskManager.addEvent(&(mDcf77DecodeTask.getPowerdownEvent()));
 	mTaskManager.addEvent(&(mDcf77DecodeTask.getPulseEvent()));
+
+	mSettings1Button.init();
+	mSettings2Button.init();
 }
 
 void SystemManager::runTasks()
