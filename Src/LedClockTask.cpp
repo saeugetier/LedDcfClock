@@ -11,9 +11,12 @@
 LedClockTask::LedClockTask(PeripheralReference<RtcClock> clock,
 		PeripheralReference<WS2812<60 + 12>> leds,
 		PeripheralReference<PushButton> button,
-		PeripheralReference<SystemTick> tick) :
+		PeripheralReference<SystemTick> tick,
+		Settings& settings) :
 		mSystemTimerEvent(this, static_cast<EventType::type>(SystemEventType::SYSTICK_EVENT)),
-		mSystemTick(tick)
+		mWakeupEvent(this, static_cast<EventType::type>(SystemEventType::PUSH_BUTTON_EVENT)),
+		mSystemTick(tick),
+		mLedClock(&settings)
 {
 	mMode = TaskMode::SLEEP;
 	mSystemTimerEvent.getType();
