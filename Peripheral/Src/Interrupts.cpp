@@ -52,8 +52,8 @@ void EXTI2_3_IRQHandler()
 {
 	if (LL_EXTI_IsActiveFallingFlag_0_31(LL_EXTI_LINE_2))
 	{
-		if(Settings1Button::getInstance() != nullptr)
-			Settings1Button::getInstance()->handleInterrupt();
+		if(Settings2Button::getInstance() != nullptr)
+			Settings2Button::getInstance()->handleInterrupt();
 		LL_EXTI_ClearFallingFlag_0_31(LL_EXTI_LINE_2);
 	}
 }
@@ -66,8 +66,8 @@ void EXTI4_15_IRQHandler()
 
 	if (LL_EXTI_IsActiveFallingFlag_0_31(LL_EXTI_LINE_4)) //Buttons react on falling edges
 	{
-		if(Settings2Button::getInstance() != nullptr)
-			Settings2Button::getInstance()->handleInterrupt();
+		if(Settings1Button::getInstance() != nullptr)
+			Settings1Button::getInstance()->handleInterrupt();
 		LL_EXTI_ClearFallingFlag_0_31(LL_EXTI_LINE_4);
 	}
 	else if(LL_EXTI_IsActiveRisingFlag_0_31(LL_EXTI_LINE_4)) //Dcf Powerdown reacts on rising edges
