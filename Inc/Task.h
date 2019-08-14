@@ -28,7 +28,7 @@ public:
 	virtual void handleEvent(EventType::type event) = 0;
 protected:
 	virtual void taskModeChanged(TaskMode mode) = 0;
-	TaskMode mMode;
+	TaskMode mMode = TaskMode::NONE;
 };
 
 #endif /* INC_TASK_H_ */
