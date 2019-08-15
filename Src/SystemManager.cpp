@@ -9,31 +9,33 @@
 
 SystemManager::SystemManager() :
 		mPulseDetector(false),
-		mDcfPulseCallback(mTaskManager),
-		mPowerSourceCallback(mTaskManager),
 		mDcfPowerDownCallback(mTaskManager),
+		mDcfPulseCallback(mTaskManager),
 		mDcfWakeUpCallback(mTaskManager),
 		mSysTickCallback(mTaskManager),
+		mPowerSourceCallback(mTaskManager),
 		mPowerSupplyCallback(mTaskManager),
+		mPushButtonCallback(mTaskManager),
+		mSettings1ButtonCallback(mTaskManager),
+		mSettings2ButtonCallback(mTaskManager),
+		mSettingsChangedCallback(mTaskManager),
+		mUnderVoltageCallback(mTaskManager),
 		mLedClockTask(mClock, mWS2812, mPushButton, mSystemTick, mLedPowerEnable, mSettings),
 		mDcf77DecodeTask(mPulseDetector, mClock, mDcfWakeup, mDcfPowerdown)
 {
+	//initialize callbacks
+	mDcfPowerdown.getInstance().registerCallback(&mDcfPowerDownCallback);
 	mPulseDetector.getInstance().registerCallback(&mDcfPulseCallback);
 	mDcfWakeup.getInstance().registerCallback(&mDcfWakeUpCallback);
 	mSystemTick.getInstance().registerCallback(&mSysTickCallback);
-	mDcfPowerdown.getInstance().registerCallback(&mDcfPowerDownCallback);
+	mPowerSource.getInstance().registerCallback(&mPowerSourceCallback);
+	mPushButton.getInstance().registerCallback(&mPushButtonCallback);
+	mSettings1Button.getInstance().registerCallback(&mSettings1ButtonCallback);
+	mSettings2Button.getInstance().registerCallback(&mSettings2ButtonCallback);
 
+	//add tasks
 	mTaskManager.addTask(&mDcf77DecodeTask);
 	mTaskManager.addTask(&mLedClockTask);
-
-	mTaskManager.addEvent(&(mLedClockTask.getTickEvent()));
-
-	mTaskManager.addEvent(&(mDcf77DecodeTask.getWakeupEvent()));
-	mTaskManager.addEvent(&(mDcf77DecodeTask.getPowerdownEvent()));
-	mTaskManager.addEvent(&(mDcf77DecodeTask.getPulseEvent()));
-
-	mSettings1Button.init();
-	mSettings2Button.init();
 }
 
 void SystemManager::runTasks()

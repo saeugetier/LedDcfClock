@@ -26,6 +26,7 @@
 #include "StatusLed.h"
 #include "PowerSupervisorTask.h"
 #include "SettingsTask.h"
+#include "PowerSource.h"
 
 class SystemEventType : public EventType
 {
@@ -37,12 +38,12 @@ public:
 		DCF_PULSE,
 		DCF_WAKE_UP,
 		SYSTICK_EVENT,
-		DMA_BUFFER_EMPTY,
 		POWER_SOURCE_CHANGED,
 		SUPPLY_VOLTAGE_LEVEL,
 		PUSH_BUTTON_EVENT,
 		SETTINGS1_BUTTON_EVENT,
 		SETTINGS2_BUTTON_EVENT,
+		CLOCK_ALARM_EVENT,
 		SETTINGS_CHANGED,
 		UNDERVOLTAGE_SHUTDOWN
 	};
@@ -69,18 +70,25 @@ protected:
 	//Common
 	PeripheralReference<StatusLed1> mLed1 = StatusLed1();
 	PeripheralReference<StatusLed2> mLed2 = StatusLed2();
-
+	PeripheralReference<PowerSource> mPowerSource = PowerSource();
+    //HMI
 	PeripheralReference<PushButton> mPushButton = PushButton();
 	PeripheralReference<Settings1Button> mSettings1Button = Settings1Button();
 	PeripheralReference<Settings2Button> mSettings2Button = Settings2Button();
 
-	// Callbacks
-	TaskCallback<static_cast<EventType::type>(SystemEventType::DCF_PULSE)> mDcfPulseCallback;
-	TaskCallback<static_cast<EventType::type>(SystemEventType::POWER_SOURCE_CHANGED)> mPowerSourceCallback;
+	// Callbacks Peripheral
 	TaskCallback<static_cast<EventType::type>(SystemEventType::DCF_POWER_DOWN)> mDcfPowerDownCallback;
+	TaskCallback<static_cast<EventType::type>(SystemEventType::DCF_PULSE)> mDcfPulseCallback;
 	TaskCallback<static_cast<EventType::type>(SystemEventType::DCF_WAKE_UP)> mDcfWakeUpCallback;
 	TaskCallback<static_cast<EventType::type>(SystemEventType::SYSTICK_EVENT)> mSysTickCallback;
+	TaskCallback<static_cast<EventType::type>(SystemEventType::POWER_SOURCE_CHANGED)> mPowerSourceCallback;
 	TaskCallback<static_cast<EventType::type>(SystemEventType::SUPPLY_VOLTAGE_LEVEL)> mPowerSupplyCallback;
+	TaskCallback<static_cast<EventType::type>(SystemEventType::PUSH_BUTTON_EVENT)> mPushButtonCallback;
+	TaskCallback<static_cast<EventType::type>(SystemEventType::SETTINGS1_BUTTON_EVENT)> mSettings1ButtonCallback;
+	TaskCallback<static_cast<EventType::type>(SystemEventType::SETTINGS2_BUTTON_EVENT)> mSettings2ButtonCallback;
+	// Callback Tasks
+	TaskCallback<static_cast<EventType::type>(SystemEventType::SETTINGS_CHANGED)> mSettingsChangedCallback;
+	TaskCallback<static_cast<EventType::type>(SystemEventType::UNDERVOLTAGE_SHUTDOWN)> mUnderVoltageCallback;
 	// Tasks
 	LedClockTask mLedClockTask;
 	Dcf77DecodeTask mDcf77DecodeTask;
