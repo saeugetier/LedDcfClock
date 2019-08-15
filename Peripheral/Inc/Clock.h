@@ -5,14 +5,16 @@
 #include "time.h"
 #include "Settings.h"
 
-class RtcClock : public Peripheral
+class RtcClock : public InterruptPeripheral<RtcClock>
 {
 public:
+	RtcClock();
 	time_t now();
 	uint16_t getSubsecond();
 	void calibrate(time_t time, uint16_t subseconds);
 	bool setTime(time_t time, uint16_t subseconds);
 	bool isClockSet();
+	void handleInterrupt();
 protected:
 	Settings* mSettings;
 	void applyCorrectionValue(int32_t correction_value);
