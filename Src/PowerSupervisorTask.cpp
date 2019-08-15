@@ -27,3 +27,8 @@ void PowerSupervisorTask::taskModeChanged(TaskMode mode)
 
 }
 
+EventList PowerSupervisorTask::getEvents()
+{
+	EventList list;
+	return list;
+}

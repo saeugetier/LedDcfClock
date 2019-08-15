@@ -77,3 +77,12 @@ void Dcf77DecodeTask::taskModeChanged(TaskMode mode)
 
 	}
 }
+
+EventList Dcf77DecodeTask::getEvents()
+{
+	EventList list;
+	list.push_front(&mDcfWakeupEvent);
+	list.push_front(&mDcfPowerdownEvent);
+	list.push_front(&mDcfPulseEvent);
+	return list;
+}

@@ -26,6 +26,7 @@ public:
 	Event& getWakeupEvent() {return mDcfWakeupEvent;}
 	Event& getPowerdownEvent() {return mDcfPowerdownEvent;}
 	Event& getPulseEvent() {return mDcfPulseEvent;}
+	virtual EventList getEvents();
 protected:
 	virtual void taskModeChanged(TaskMode mode);
 	PeripheralReference<PulseDetector> mPulseDetector;

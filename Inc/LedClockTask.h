@@ -30,12 +30,15 @@ public:
 	virtual void handleEvent(EventType::type event);
 	Event& getTickEvent() { return mSystemTimerEvent; }
 	Event& getWakeupEvent() { return mWakeupEvent; }
+	virtual EventList getEvents();
 protected:
 	virtual void taskModeChanged(TaskMode mode);
 	bool signalizeLeds();
+	void startSignalization();
 
 	Event mSystemTimerEvent;
 	Event mWakeupEvent;
+	Event mClockEvent;
 
 	PeripheralReference<RtcClock> mClock;
 	PeripheralReference<WS2812<60+12>> mWS2812;
@@ -43,6 +46,7 @@ protected:
 	PeripheralReference<SystemTick> mSystemTick;
 	PeripheralReference<LedPowerEnable> mLedPowerEnable;
 
+	Settings& mSettings;
 	LedClock mLedClock;
 	uint32_t mCurrentSignalizationTime;
 };

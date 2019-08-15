@@ -16,6 +16,7 @@ public:
 	PowerSupervisorTask();
 	virtual void run();
 	virtual void handleEvent(EventType::type event);
+	virtual EventList getEvents();
 protected:
 	virtual void taskModeChanged(TaskMode mode);
 };
