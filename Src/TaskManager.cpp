@@ -42,6 +42,12 @@ void TaskManager::addTask(Task* task)
 			break;
 		}
 	}
+	EventList eventList = task->getEvents();
+	while(!eventList.empty())
+	{
+		addEvent(eventList.front());
+		eventList.pop_front();
+	}
 }
 
 void TaskManager::addEvent(Event* event)
