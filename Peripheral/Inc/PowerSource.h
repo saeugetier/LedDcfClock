@@ -13,10 +13,10 @@
 class PowerSource : public InterruptPeripheral<PowerSource>
 {
 protected:
-	PowerSource();
 	virtual void initialize();
 	virtual void shutdown();
 public:
+	PowerSource();
 	virtual void handleInterrupt();
 };
 
