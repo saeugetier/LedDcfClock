@@ -14,6 +14,7 @@
 #include "SystemTick.h"
 #include "Buttons.h"
 #include "PowerSource.h"
+#include "Clock.h"
 
 //using extern "C" to get the right function reference -- ABI changed for C++ function calls
 extern "C"
@@ -92,6 +93,15 @@ void EXTI4_15_IRQHandler()
 			DcfWakeup::getInstance()->handleInterrupt();
 		LL_EXTI_ClearRisingFlag_0_31(LL_EXTI_LINE_5);
 	}
+}
+}
+
+extern "C"
+{
+void RTC_TAMP_IRQHandler()
+{
+	if(RtcClock::getInstance() != nullptr)
+		RtcClock::getInstance()->handleInterrupt();
 }
 }
 
