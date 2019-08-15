@@ -3,6 +3,14 @@
 
 #define REASONABLE_SECONDS_CALIBRATION_LIMIT 10
 
+template<>
+RtcClock* InterruptPeripheral<RtcClock>::mPeripheralInstance = nullptr;
+
+RtcClock::RtcClock()
+{
+	mPeripheralInstance = this;
+}
+
 void RtcClock::initialize()
 {
 	  LL_RTC_InitTypeDef RTC_InitStruct = {0};
@@ -180,3 +188,8 @@ bool RtcClock::isClockSet()
 	return LL_RTC_IsActiveFlag_INITS(RTC) && !LL_RTC_IsActiveFlag_INIT(RTC);
 }
 
+void RtcClock::handleInterrupt()
+{
+	if(mCallback != nullptr)
+		mCallback->notify();
+}
