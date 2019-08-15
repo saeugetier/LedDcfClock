@@ -15,6 +15,7 @@
 #include "StatusLed.h"
 #include "WS2812.h"
 #include "LedPowerEnable.h"
+#include "PowerSource.h"
 
 template class PeripheralReference<SystemTick> ;
 template class PeripheralReference<PulseDetector> ;
@@ -28,6 +29,7 @@ template class PeripheralReference<Settings1Button> ;
 template class PeripheralReference<Settings2Button> ;
 template class PeripheralReference<WS2812<60+12>> ;
 template class PeripheralReference<LedPowerEnable> ;
+template class PeripheralReference<PowerSource> ;
 
 template<class periph>
 uint8_t PeripheralReference<periph>::mInitializationCounter = 0;
