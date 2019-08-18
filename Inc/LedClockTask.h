@@ -35,6 +35,7 @@ protected:
 	virtual void taskModeChanged(TaskMode mode);
 	bool signalizeLeds();
 	void startSignalization();
+	void stopSignalization();
 
 	Event mSystemTimerEvent;
 	Event mWakeupEvent;

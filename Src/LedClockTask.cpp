@@ -47,6 +47,11 @@ void LedClockTask::handleEvent(EventType::type event)
 	case SystemEventType::PUSH_BUTTON_EVENT:
 		setTaskMode(TaskMode::SLEEP);
 		startSignalization();
+		break;
+	case SystemEventType::UNDERVOLTAGE_SHUTDOWN:
+		stopSignalization();
+		setTaskMode(TaskMode::DEEPSLEEP);
+		break;
 	default:
 		break;
 	}
@@ -108,6 +113,11 @@ bool LedClockTask::signalizeLeds()
 void LedClockTask::startSignalization()
 {
 	mCurrentSignalizationTime = 0;
+}
+
+void LedClockTask::stopSignalization()
+{
+
 }
 
 EventList LedClockTask::getEvents()
