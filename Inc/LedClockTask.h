@@ -39,6 +39,7 @@ protected:
 	Event mSystemTimerEvent;
 	Event mWakeupEvent;
 	Event mClockEvent;
+	Event mUndervoltageEvent;
 
 	PeripheralReference<RtcClock> mClock;
 	PeripheralReference<WS2812<60+12>> mWS2812;
