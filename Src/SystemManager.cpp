@@ -22,7 +22,9 @@ SystemManager::SystemManager() :
 		mUnderVoltageCallback(mTaskManager),
 		mLedClockTask(mClock, mWS2812, mPushButton, mSystemTick, mLedPowerEnable, mSettings),
 		mDcf77DecodeTask(mPulseDetector, mClock, mDcfWakeup, mDcfPowerdown),
-		mPowerSupervisorTask(mPowerSource, &mUnderVoltageCallback)
+		mPowerSupervisorTask(mPowerSource, mSVSupervisor, &mUnderVoltageCallback),
+		mSettingsTask(mSettings1Button, mSettings2Button, &mSettingsChangedCallback, &mSettings),
+		mSettings(mStorage)
 {
 	//initialize callbacks
 	mDcfPowerdown.getInstance().registerCallback(&mDcfPowerDownCallback);
@@ -33,11 +35,13 @@ SystemManager::SystemManager() :
 	mPushButton.getInstance().registerCallback(&mPushButtonCallback);
 	mSettings1Button.getInstance().registerCallback(&mSettings1ButtonCallback);
 	mSettings2Button.getInstance().registerCallback(&mSettings2ButtonCallback);
+	mSVSupervisor.getInstance().registerCallback(&mPowerSupplyCallback);
 
 	//add tasks
 	mTaskManager.addTask(&mPowerSupervisorTask);
 	mTaskManager.addTask(&mDcf77DecodeTask);
 	mTaskManager.addTask(&mLedClockTask);
+	mTaskManager.addTask(&mSettingsTask);
 }
 
 void SystemManager::runTasks()

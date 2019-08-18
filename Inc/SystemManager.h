@@ -28,6 +28,8 @@
 #include "SettingsTask.h"
 #include "PowerSource.h"
 #include "TestPoint.h"
+#include "SupplyVoltageSupervisor.h"
+#include "SettingsStorage.h"
 
 class SystemEventType : public EventType
 {
@@ -66,11 +68,13 @@ private:
 	RtcClock _mClock;
 	StatusLed1 _mStatusLed1;
 	StatusLed2 _mStatusLed2;
+	SupplyVoltageSupervisor _mSVSupervisor;
 	PowerSource _mPowerSource;
 	PushButton _mPushButton;
 	Settings1Button _mSettings1Button;
 	Settings2Button _mSettings2Button;
 	TestPoint _mTestPoint;
+	SettingsStorage _mStorage;
 protected:
 	TaskManager mTaskManager;
 	//Peripherals
@@ -87,6 +91,9 @@ protected:
 	//Common
 	PeripheralReference<StatusLed1> mLed1 = _mStatusLed1;
 	PeripheralReference<StatusLed2> mLed2 = _mStatusLed2;
+	PeripheralReference<SettingsStorage> mStorage = _mStorage;
+	//Supply
+	PeripheralReference<SupplyVoltageSupervisor> mSVSupervisor = _mSVSupervisor;
 	PeripheralReference<PowerSource> mPowerSource = _mPowerSource;
     //HMI
 	PeripheralReference<PushButton> mPushButton = _mPushButton;
@@ -112,6 +119,7 @@ protected:
 	LedClockTask mLedClockTask;
 	Dcf77DecodeTask mDcf77DecodeTask;
 	PowerSupervisorTask mPowerSupervisorTask;
+	SettingsTask mSettingsTask;
 
 	Settings mSettings;
 };
