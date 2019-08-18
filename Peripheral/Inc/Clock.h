@@ -30,6 +30,8 @@ protected:
 	void applyCorrectionValue(int32_t correction_value);
 	virtual void initialize();
 	virtual void shutdown();
+
+	Alarm mCurrentAlarm;
 };
 
 
