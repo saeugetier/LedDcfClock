@@ -21,7 +21,8 @@ SystemManager::SystemManager() :
 		mSettingsChangedCallback(mTaskManager),
 		mUnderVoltageCallback(mTaskManager),
 		mLedClockTask(mClock, mWS2812, mPushButton, mSystemTick, mLedPowerEnable, mSettings),
-		mDcf77DecodeTask(mPulseDetector, mClock, mDcfWakeup, mDcfPowerdown)
+		mDcf77DecodeTask(mPulseDetector, mClock, mDcfWakeup, mDcfPowerdown),
+		mPowerSupervisorTask(mPowerSource, &mUnderVoltageCallback)
 {
 	//initialize callbacks
 	mDcfPowerdown.getInstance().registerCallback(&mDcfPowerDownCallback);
