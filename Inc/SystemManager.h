@@ -54,27 +54,42 @@ class SystemManager
 public:
 	SystemManager();
 	void runTasks();
+private:
+	//private declaration of
+	SystemTick _mSystemTick;
+	WS2812<60+12> _mWS2812;
+	LedPowerEnable _mLedPowerEnable;
+	PulseDetector _mPulseDetector;
+	DcfWakeup _mDcfWakeup;
+	DcfPowerdown _mDcfPowerdown;
+	RtcClock _mClock;
+	StatusLed1 _mStatusLed1;
+	StatusLed2 _mStatusLed2;
+	PowerSource _mPowerSource;
+	PushButton _mPushButton;
+	Settings1Button _mSettings1Button;
+	Settings2Button _mSettings2Button;
 protected:
 	TaskManager mTaskManager;
 	//Peripherals
 	//LED
-	PeripheralReference<SystemTick> mSystemTick = SystemTick();
-	PeripheralReference<WS2812<60+12>> mWS2812 = WS2812<60+12>();
-	PeripheralReference<LedPowerEnable> mLedPowerEnable = LedPowerEnable();
+	PeripheralReference<SystemTick> mSystemTick = _mSystemTick;
+	PeripheralReference<WS2812<60+12>> mWS2812 = _mWS2812;
+	PeripheralReference<LedPowerEnable> mLedPowerEnable = _mLedPowerEnable;
 	//DCF
-	PeripheralReference<PulseDetector> mPulseDetector = PulseDetector(false);
-	PeripheralReference<DcfWakeup> mDcfWakeup = DcfWakeup();
-	PeripheralReference<DcfPowerdown> mDcfPowerdown = DcfPowerdown();
+	PeripheralReference<PulseDetector> mPulseDetector = _mPulseDetector;
+	PeripheralReference<DcfWakeup> mDcfWakeup = _mDcfWakeup;
+	PeripheralReference<DcfPowerdown> mDcfPowerdown = _mDcfPowerdown;
 	//Clock
-	PeripheralReference<RtcClock> mClock = RtcClock();
+	PeripheralReference<RtcClock> mClock = _mClock;
 	//Common
-	PeripheralReference<StatusLed1> mLed1 = StatusLed1();
-	PeripheralReference<StatusLed2> mLed2 = StatusLed2();
-	PeripheralReference<PowerSource> mPowerSource = PowerSource();
+	PeripheralReference<StatusLed1> mLed1 = _mStatusLed1;
+	PeripheralReference<StatusLed2> mLed2 = _mStatusLed2;
+	PeripheralReference<PowerSource> mPowerSource = _mPowerSource;
     //HMI
-	PeripheralReference<PushButton> mPushButton = PushButton();
-	PeripheralReference<Settings1Button> mSettings1Button = Settings1Button();
-	PeripheralReference<Settings2Button> mSettings2Button = Settings2Button();
+	PeripheralReference<PushButton> mPushButton = _mPushButton;
+	PeripheralReference<Settings1Button> mSettings1Button = _mSettings1Button;
+	PeripheralReference<Settings2Button> mSettings2Button = _mSettings2Button;
 
 	// Callbacks Peripheral
 	TaskCallback<static_cast<EventType::type>(SystemEventType::DCF_POWER_DOWN)> mDcfPowerDownCallback;

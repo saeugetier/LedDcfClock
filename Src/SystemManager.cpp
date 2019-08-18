@@ -8,7 +8,7 @@
 #include "SystemManager.h"
 
 SystemManager::SystemManager() :
-		mPulseDetector(false),
+		_mPulseDetector(false),
 		mDcfPowerDownCallback(mTaskManager),
 		mDcfPulseCallback(mTaskManager),
 		mDcfWakeUpCallback(mTaskManager),
@@ -35,6 +35,7 @@ SystemManager::SystemManager() :
 	mSettings2Button.getInstance().registerCallback(&mSettings2ButtonCallback);
 
 	//add tasks
+	mTaskManager.addTask(&mPowerSupervisorTask);
 	mTaskManager.addTask(&mDcf77DecodeTask);
 	mTaskManager.addTask(&mLedClockTask);
 }
