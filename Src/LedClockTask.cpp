@@ -25,7 +25,9 @@ LedClockTask::LedClockTask(PeripheralReference<RtcClock> clock,
 		mSystemTick(tick),
 		mLedPowerEnable(power),
 		mSettings(settings),
-		mLedClock(leds,power)
+		mLedClock(leds,power),
+		mCurrentSignalizationTimeout(0),
+		mCurrentSignalizationType(SignalizationType::NONE)
 {
 	setTaskMode(TaskMode::SLEEP);
 }
@@ -42,11 +44,18 @@ void LedClockTask::handleEvent(EventType::type event)
 	{
 	case SystemEventType::SYSTICK_EVENT:
 		if(!signalizeLeds())
+		{
+			stopSignalization();
 			setTaskMode(TaskMode::DEEPSLEEP);
+		}
+		break;
+	case SystemEventType::CLOCK_ALARM_EVENT:
+		setTaskMode(TaskMode::SLEEP);
+		startSignalization(2000);
 		break;
 	case SystemEventType::PUSH_BUTTON_EVENT:
 		setTaskMode(TaskMode::SLEEP);
-		startSignalization();
+		startSignalization(8000);
 		break;
 	case SystemEventType::UNDERVOLTAGE_SHUTDOWN:
 		stopSignalization();
@@ -84,40 +93,55 @@ void LedClockTask::taskModeChanged(TaskMode mode)
 
 bool LedClockTask::signalizeLeds()
 {
-	if(mLedClock.isReady())
+	if(mCurrentSignalizationType == SignalizationType::NONE)
+		return false;
+
+
+	if(mLedClock.isReady() && !(mCurrentSignalizationTimeout % 20)) //every 20ms
 	{
 		mLedClock.setBrightness(mSettings.getBrightness());
 
-		if(mClock.getInstance().isClockSet())
+		if(mCurrentSignalizationType == SignalizationType::TIME)
 		{
 			time_t temp = mClock.getInstance().now();
 			mLedClock.displayTime(*localtime(&temp), true, mClock.getInstance().getSubsecond());
 		}
-		else
+		else if(mCurrentSignalizationType == SignalizationType::ERROR_NOT_SET)
 		{
 			mLedClock.displayError(LedClock::Error::TIME_NOT_SET);
 		}
-
-
+		else if(mCurrentSignalizationType == SignalizationType::ERROR_HARDWARE)
+		{
+			mLedClock.displayError(LedClock::Error::HARDWARE_FAULT);
+		}
 	}
 
-	if(mCurrentSignalizationTime < 100)
+	if(mCurrentSignalizationTimeout > 0)
 	{
-		mCurrentSignalizationTime++;
+		mCurrentSignalizationTimeout--;
 		return true;
 	}
 
 	return false;
 }
 
-void LedClockTask::startSignalization()
+void LedClockTask::startSignalization(uint32_t length)
 {
-	mCurrentSignalizationTime = 0;
+	if(mClock.getInstance().isClockSet())
+	{
+		mCurrentSignalizationType = SignalizationType::TIME;
+		mCurrentSignalizationTimeout = length;
+	}
+	else
+	{
+		mCurrentSignalizationType = SignalizationType::ERROR_NOT_SET;
+		mCurrentSignalizationTimeout = 5000; //error is shown 5 seconds
+	}
 }
 
 void LedClockTask::stopSignalization()
 {
-
+	mCurrentSignalizationType = SignalizationType::NONE;
 }
 
 EventList LedClockTask::getEvents()

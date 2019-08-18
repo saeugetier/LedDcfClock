@@ -34,8 +34,16 @@ public:
 protected:
 	virtual void taskModeChanged(TaskMode mode);
 	bool signalizeLeds();
-	void startSignalization();
+	void startSignalization(uint32_t length);
 	void stopSignalization();
+
+	enum SignalizationType
+	{
+		NONE,
+		TIME,
+		ERROR_NOT_SET,
+		ERROR_HARDWARE
+	};
 
 	Event mSystemTimerEvent;
 	Event mWakeupEvent;
@@ -50,7 +58,8 @@ protected:
 
 	Settings& mSettings;
 	LedClock mLedClock;
-	uint32_t mCurrentSignalizationTime;
+	uint32_t mCurrentSignalizationTimeout;
+	SignalizationType mCurrentSignalizationType;
 };
 
 #endif /* INC_LEDCLOCKTASK_H_ */
