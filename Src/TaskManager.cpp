@@ -23,6 +23,11 @@ void TaskManager::invokeEvent(EventType::type event)
 	{
 		for(int i = 0; i < MAX_EVENTS; i++)
 		{
+			if(mInvokedEvents[i] == event) //don't insert same event again
+			{
+				break;
+			}
+
 			if(mInvokedEvents[i] == EventType::NONE)
 			{
 				mInvokedEvents[i] = event;
