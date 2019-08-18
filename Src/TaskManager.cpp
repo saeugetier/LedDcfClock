@@ -21,7 +21,7 @@ void TaskManager::invokeEvent(EventType::type event)
 {
 	if(event != EventType::NONE)
 	{
-		for(int i; i < MAX_EVENTS; i++)
+		for(int i = 0; i < MAX_EVENTS; i++)
 		{
 			if(mInvokedEvents[i] == EventType::NONE)
 			{
