@@ -27,6 +27,7 @@
 #include "PowerSupervisorTask.h"
 #include "SettingsTask.h"
 #include "PowerSource.h"
+#include "TestPoint.h"
 
 class SystemEventType : public EventType
 {
@@ -69,6 +70,7 @@ private:
 	PushButton _mPushButton;
 	Settings1Button _mSettings1Button;
 	Settings2Button _mSettings2Button;
+	TestPoint _mTestPoint;
 protected:
 	TaskManager mTaskManager;
 	//Peripherals
@@ -90,6 +92,8 @@ protected:
 	PeripheralReference<PushButton> mPushButton = _mPushButton;
 	PeripheralReference<Settings1Button> mSettings1Button = _mSettings1Button;
 	PeripheralReference<Settings2Button> mSettings2Button = _mSettings2Button;
+	//Debug
+	PeripheralReference<TestPoint> mTestPoint = _mTestPoint;
 
 	// Callbacks Peripheral
 	TaskCallback<static_cast<EventType::type>(SystemEventType::DCF_POWER_DOWN)> mDcfPowerDownCallback;
