@@ -9,16 +9,26 @@
 #define INC_POWERSUPERVISORTASK_H_
 
 #include "Task.h"
+#include "Callback.h"
+#include "PeripheralReference.h"
+#include "PowerSource.h"
+#include "Event.h"
+
 
 class PowerSupervisorTask : public Task
 {
 public:
-	PowerSupervisorTask();
+	PowerSupervisorTask(PeripheralReference<PowerSource> source, Callback* undervoltageCallback);
 	virtual void run();
 	virtual void handleEvent(EventType::type event);
 	virtual EventList getEvents();
 protected:
 	virtual void taskModeChanged(TaskMode mode);
+	Callback* mUndervoltageCallback;
+	PeripheralReference<PowerSource> mPowerSource;
+
+	Event mSupplyVoltageLevelEvent;
+	Event mPowerSourceChanged;
 };
 
 
