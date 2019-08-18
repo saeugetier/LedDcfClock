@@ -73,18 +73,37 @@ extern "C"
 {
 void EXTI4_15_IRQHandler()
 {
-	// @TODO: EXTI_LINE_4 is used double. Proper handling has to be implemented
+	static bool lastSettings1ButtonState = true; //default state is high
+	static bool lastDcfPowerdownState = false; //default state is low
 
-	if (LL_EXTI_IsActiveFallingFlag_0_31(LL_EXTI_LINE_4)) //Buttons react on falling edges
+	if (LL_EXTI_IsActiveFallingFlag_0_31(LL_EXTI_LINE_4) && LL_EXTI_IsActiveRisingFlag_0_31(LL_EXTI_LINE_4)) //Buttons react on falling edges
 	{
-		if(Settings1Button::getInstance() != nullptr)
-			Settings1Button::getInstance()->handleInterrupt();
+		bool currentSettings1State = LL_GPIO_IsInputPinSet(SETTINGS1_GPIO_Port, SETTINGS1_Pin);
+		bool currentDcfPowerdownState = LL_GPIO_IsInputPinSet(PON_IN_GPIO_Port, PON_IN_Pin);
+
+		if(lastSettings1ButtonState != currentSettings1State)
+		{
+			lastSettings1ButtonState = currentSettings1State;
+
+			if(currentSettings1State == false)
+			{
+				if(Settings1Button::getInstance() != nullptr)
+					Settings1Button::getInstance()->handleInterrupt();
+			}
+		}
+
+		if(lastDcfPowerdownState != currentDcfPowerdownState)
+		{
+			lastDcfPowerdownState = currentDcfPowerdownState;
+
+			if(currentDcfPowerdownState == false)
+			{
+				if(DcfPowerdown::getInstance() != nullptr)
+					DcfPowerdown::getInstance()->handleInterrupt();
+			}
+		}
+
 		LL_EXTI_ClearFallingFlag_0_31(LL_EXTI_LINE_4);
-	}
-	if(LL_EXTI_IsActiveRisingFlag_0_31(LL_EXTI_LINE_4)) //Dcf Powerdown reacts on rising edges
-	{
-		if(DcfPowerdown::getInstance() != nullptr)
-			DcfPowerdown::getInstance()->handleInterrupt();
 		LL_EXTI_ClearRisingFlag_0_31(LL_EXTI_LINE_4);
 	}
 	else if(LL_EXTI_IsActiveRisingFlag_0_31(LL_EXTI_LINE_5))
