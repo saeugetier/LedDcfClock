@@ -12,13 +12,16 @@
 #include "Callback.h"
 #include "PeripheralReference.h"
 #include "PowerSource.h"
+#include "SupplyVoltageSupervisor.h"
 #include "Event.h"
 
 
 class PowerSupervisorTask : public Task
 {
 public:
-	PowerSupervisorTask(PeripheralReference<PowerSource> source, Callback* undervoltageCallback);
+	PowerSupervisorTask(PeripheralReference<PowerSource> source,
+			PeripheralReference<SupplyVoltageSupervisor> supervisor,
+			Callback* undervoltageCallback);
 	virtual void run();
 	virtual void handleEvent(EventType::type event);
 	virtual EventList getEvents();
@@ -26,6 +29,7 @@ protected:
 	virtual void taskModeChanged(TaskMode mode);
 	Callback* mUndervoltageCallback;
 	PeripheralReference<PowerSource> mPowerSource;
+	PeripheralReference<SupplyVoltageSupervisor> mSupervisor;
 
 	Event mSupplyVoltageLevelEvent;
 	Event mPowerSourceChanged;

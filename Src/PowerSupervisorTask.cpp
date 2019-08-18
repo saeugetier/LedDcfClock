@@ -8,8 +8,10 @@
 #include "PowerSupervisorTask.h"
 #include "SystemManager.h"
 
-PowerSupervisorTask::PowerSupervisorTask(PeripheralReference<PowerSource> source, Callback* undervoltageCallback) :
-	mUndervoltageCallback(undervoltageCallback), mPowerSource(source),
+PowerSupervisorTask::PowerSupervisorTask(PeripheralReference<PowerSource> source,
+		PeripheralReference<SupplyVoltageSupervisor> supervisor,
+		Callback* undervoltageCallback) :
+	mUndervoltageCallback(undervoltageCallback), mPowerSource(source), mSupervisor(supervisor),
 	mSupplyVoltageLevelEvent(this, static_cast<EventType::type>(SystemEventType::SUPPLY_VOLTAGE_LEVEL)),
 	mPowerSourceChanged(this, static_cast<EventType::type>(SystemEventType::POWER_SOURCE_CHANGED))
 {
