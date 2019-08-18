@@ -76,7 +76,7 @@ void TaskManager::runTasks()
 	{
 		if(mInvokedEvents[i] == EventType::NONE)
 		{
-			break;
+			break; //last event reached
 		}
 		else  //invoked event list is not empty
 		{
