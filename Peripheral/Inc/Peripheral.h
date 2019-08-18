@@ -34,6 +34,7 @@ template <class Periph>
 class InterruptPeripheral : public Peripheral
 {
 public:
+	InterruptPeripheral() : mCallback(nullptr) {}
 	void registerCallback(Callback* callback) { mCallback = callback; }
 	virtual void handleInterrupt() = 0;
 	static Periph* getInstance() { return mPeripheralInstance;	}
