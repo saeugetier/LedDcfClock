@@ -193,3 +193,8 @@ void RtcClock::handleInterrupt()
 	if(mCallback != nullptr)
 		mCallback->notify();
 }
+
+void RtcClock::setAlarmMode(RtcClock::Alarm)
+{
+	// @TODO: implementation
+}
