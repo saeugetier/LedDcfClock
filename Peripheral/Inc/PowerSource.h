@@ -16,8 +16,16 @@ protected:
 	virtual void initialize();
 	virtual void shutdown();
 public:
+	enum Source
+	{
+		BATTERY,
+		USB
+	};
+
 	PowerSource();
 	virtual void handleInterrupt();
+
+	Source getSource();
 };
 
 #endif /* INC_POWERSOURCE_H_ */

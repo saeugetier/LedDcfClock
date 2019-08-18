@@ -26,7 +26,7 @@ void PowerSource::initialize()
 	EXTI_InitStruct.Mode = LL_EXTI_MODE_IT;
 	EXTI_InitStruct.Trigger = LL_EXTI_TRIGGER_RISING_FALLING;
 	LL_EXTI_Init(&EXTI_InitStruct);
-	LL_GPIO_SetPinPull(POWER_SOURCE_GPIO_Port, POWER_SOURCE_Pin, LL_GPIO_PULL_NO);
+	LL_GPIO_SetPinPull(POWER_SOURCE_GPIO_Port, POWER_SOURCE_Pin, LL_GPIO_PULL_DOWN);
 	LL_GPIO_SetPinMode(POWER_SOURCE_GPIO_Port, POWER_SOURCE_Pin, LL_GPIO_MODE_INPUT);
 
 	NVIC_EnableIRQ (EXTI0_1_IRQn);
@@ -42,4 +42,10 @@ void PowerSource::handleInterrupt()
 {
 	if(mCallback != nullptr)
 		mCallback->notify();
+}
+
+PowerSource::Source PowerSource::getSource()
+{
+	uint32_t pinSet = LL_GPIO_IsInputPinSet(POWER_SOURCE_GPIO_Port, POWER_SOURCE_Pin);
+	return pinSet ? Source::USB : Source::BATTERY;
 }
