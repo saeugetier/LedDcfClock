@@ -29,6 +29,7 @@ class Task
 public:
 	void setTaskMode(TaskMode mode);
 	TaskMode getTaskMode() const;
+	virtual void setup() = 0;
 	virtual void run() = 0;
 	virtual void handleEvent(EventType::type event) = 0;
 	virtual EventList getEvents() = 0;
