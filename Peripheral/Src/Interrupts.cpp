@@ -76,7 +76,7 @@ void EXTI4_15_IRQHandler()
 	static bool lastSettings1ButtonState = true; //default state is high
 	static bool lastDcfPowerdownState = false; //default state is low
 
-	if (LL_EXTI_IsActiveFallingFlag_0_31(LL_EXTI_LINE_4) && LL_EXTI_IsActiveRisingFlag_0_31(LL_EXTI_LINE_4)) //Buttons react on falling edges
+	if (LL_EXTI_IsActiveFallingFlag_0_31(LL_EXTI_LINE_4) || LL_EXTI_IsActiveRisingFlag_0_31(LL_EXTI_LINE_4)) //Buttons react on falling edges
 	{
 		bool currentSettings1State = LL_GPIO_IsInputPinSet(SETTINGS1_GPIO_Port, SETTINGS1_Pin);
 		bool currentDcfPowerdownState = LL_GPIO_IsInputPinSet(PON_IN_GPIO_Port, PON_IN_Pin);
