@@ -15,10 +15,6 @@ public:
 protected:
 	virtual void initialize();
 	virtual void shutdown();
-
-	Callback* mPulseCallback;
-	Callback* mWakeupCallback;
-
 	uint32_t mEdgeHigh;
 	uint32_t mEdgeLow;
 
