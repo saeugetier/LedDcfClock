@@ -28,8 +28,6 @@ public:
 			Settings& settings);
 	virtual void run();
 	virtual void handleEvent(EventType::type event);
-	Event& getTickEvent() { return mSystemTimerEvent; }
-	Event& getWakeupEvent() { return mWakeupEvent; }
 	virtual EventList getEvents();
 protected:
 	virtual void taskModeChanged(TaskMode mode);
