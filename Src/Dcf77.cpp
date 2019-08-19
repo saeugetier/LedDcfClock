@@ -47,7 +47,7 @@
 /**
  * Constructor
  */
-DCF77::DCF77(RtcClock* _clock, bool OnRisingFlank)
+DCF77::DCF77(PeripheralReference<RtcClock> _clock, bool OnRisingFlank) : clock(_clock)
 {
 	// Parameters shared between interupt loop and main loop
 	filledBuffer = 0;
@@ -83,6 +83,7 @@ void DCF77::initialize(void)
 	flags.parityHour                    = 0;
 	flags.parityMin                     = 0;
 	CEST				                = 0;
+	subsecondsCircularBufferPos         = 0;
 
 	memset(subsecondsCircularBuffer,0,sizeof(subsecondsCircularBuffer));
 }
@@ -123,7 +124,7 @@ void DCF77::decode(uint32_t risingEdgeTime, uint32_t fallingEdgeTime)
 		return;
 	}
 
-	subsecondsCircularBuffer[subsecondsCircularBufferPos] = clock->getSubsecond();
+	subsecondsCircularBuffer[subsecondsCircularBufferPos] = clock.getInstance().getSubsecond();
 	subsecondsCircularBufferPos++;
 	if(subsecondsCircularBufferPos >= (sizeof(subsecondsCircularBuffer)/sizeof(uint16_t)))
 		subsecondsCircularBufferPos = 0;
@@ -167,7 +168,7 @@ inline void DCF77::finalizeBuffer(void) {
 		//LogLn("BF");
 		// Prepare filled buffer and time stamp for main loop
 		filledBuffer = runningBuffer;
-		filledTimestamp = clock->now();
+		filledTimestamp = clock.getInstance().now();
 		// Reset running buffer
 		bufferinit();
 		FilledBufferAvailable = true;
@@ -196,14 +197,14 @@ bool DCF77::receivedTimeUpdate(void) {
 
 	// Since the received signal is error-prone, and the parity check is not very strong,
 	// we will do some sanity checks on the time
-	time_t processedTime = latestupdatedTime + (clock->now() - processingTimestamp);
+	time_t processedTime = latestupdatedTime + (clock.getInstance().now() - processingTimestamp);
 	if (processedTime<MIN_TIME || processedTime>MAX_TIME) {
 		//LogLn("Time outside of bounds");
 		return false;
 	}
 
 	// If received time is close to internal clock (2 min) we are satisfied
-	time_t difference = abs(processedTime - clock->now());
+	time_t difference = abs(processedTime - clock.getInstance().now());
 	if(difference < 2*SECS_PER_MIN) {
 		//LogLn("close to internal clock");
 		storePreviousTime();
@@ -318,7 +319,7 @@ time_t DCF77::getTime(void)
 		return(0);
 	} else {
 		// Send out time, taking into account the difference between when the DCF time was received and the current time
-		time_t currentTime =latestupdatedTime + (clock->now() - processingTimestamp);
+		time_t currentTime =latestupdatedTime + (clock.getInstance().now() - processingTimestamp);
 		return(currentTime);
 	}
 }
@@ -334,7 +335,7 @@ time_t DCF77::getUTCTime(void)
 	} else {
 		// Send out time UTC time
 		int32_t UTCTimeDifference = (CEST ? 2 : 1)*SECS_PER_HOUR;
-		time_t currentTime =latestupdatedTime - UTCTimeDifference + (clock->now() - processingTimestamp);
+		time_t currentTime =latestupdatedTime - UTCTimeDifference + (clock.getInstance().now() - processingTimestamp);
 		return(currentTime);
 	}
 }
