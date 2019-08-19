@@ -16,30 +16,29 @@ Dcf77DecodeTask::Dcf77DecodeTask(PeripheralReference<PulseDetector> detector,
 		mRtcClock(clock),
 		mDcfWakeup(wake),
 		mDcfPowerDown(power),
-		mDcfDecoder(&mRtcClock.getInstance(), false),
+		mDcfDecoder(mRtcClock, false),
 		mDcfWakeupEvent(this, static_cast<EventType::type>(SystemEventType::DCF_WAKE_UP)),
 		mDcfPowerdownEvent(this, static_cast<EventType::type>(SystemEventType::DCF_POWER_DOWN)),
 		mDcfPulseEvent(this, static_cast<EventType::type>(SystemEventType::DCF_PULSE))
+{
+
+}
+
+void Dcf77DecodeTask::setup()
 {
 	setTaskMode(TaskMode::DEEPSLEEP);
 }
 
 void Dcf77DecodeTask::run()
 {
-	time_t time = mDcfDecoder.getTime();
-	// time != 0 when new timestamp is available
-	if(time != 0)
-	{
-		if(!mRtcClock.getInstance().isClockSet())
-			mRtcClock.getInstance().setTime(time, mDcfDecoder.getMedianSubsecond());
-		else
-			mRtcClock.getInstance().calibrate(time, mDcfDecoder.getMedianSubsecond());
-	}
+
 }
 
 void Dcf77DecodeTask::handleEvent(EventType::type event)
 {
 	SystemEventType::type _event = static_cast<SystemEventType::type>(event);
+	time_t time;
+
 
 	switch (_event)
 	{
@@ -48,6 +47,15 @@ void Dcf77DecodeTask::handleEvent(EventType::type event)
 		break;
 	case SystemEventType::type::DCF_PULSE:
 		mDcfDecoder.decode(mPulseDetector.getInstance().getHighEdge(), mPulseDetector.getInstance().getLowEdge());
+		time = mDcfDecoder.getTime();
+		// time != 0 when new timestamp is available
+		if(time != 0)
+		{
+			if(!mRtcClock.getInstance().isClockSet())
+				mRtcClock.getInstance().setTime(time, mDcfDecoder.getMedianSubsecond());
+			else
+				mRtcClock.getInstance().calibrate(time, mDcfDecoder.getMedianSubsecond());
+		}
 		break;
 	case SystemEventType::type::DCF_POWER_DOWN:
 		setTaskMode(TaskMode::DEEPSLEEP);
