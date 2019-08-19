@@ -129,6 +129,7 @@ void TaskManager::sleep()
 
 void TaskManager::deepSleep()
 {
+	LL_PWR_ClearFlag_WU();
 	/** Request to enter Standby mode
 	 * Following procedure describe in STM32G0xx Reference Manual
 	 * See PWR part, section Low-power modes, Standby mode
