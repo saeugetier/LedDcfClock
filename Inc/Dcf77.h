@@ -17,7 +17,7 @@
 class DCF77 {
 private:
 	//Private variables
-	RtcClock* clock;
+	PeripheralReference<RtcClock> clock;
     uint8_t pulseStart;
 
     // DCF77 and internal timestamps
@@ -83,7 +83,7 @@ private:
     uint16_t medianSubsecond;
 public:
     // Public Functions
-    DCF77(RtcClock* _clock, bool OnRisingFlank=true);
+    DCF77(PeripheralReference<RtcClock> _clock, bool OnRisingFlank=true);
 
     time_t getTime(void);
     uint16_t getMedianSubsecond();
