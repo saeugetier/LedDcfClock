@@ -5,7 +5,7 @@
 template<>
 PulseDetector* InterruptPeripheral<PulseDetector>::mPeripheralInstance = nullptr;
 
-PulseDetector::PulseDetector(bool SyncOnRisingFlank) : mPulseCallback(0)
+PulseDetector::PulseDetector(bool SyncOnRisingFlank)
 {
 	mPeripheralInstance = this;
 	mSyncOnRisingFlank = SyncOnRisingFlank;
@@ -58,6 +58,14 @@ void PulseDetector::initialize()
 	TIM_BDTRInitStruct.BreakAFMode = LL_TIM_BREAK_AFMODE_INPUT;
 	TIM_BDTRInitStruct.Break2AFMode = LL_TIM_BREAK_AFMODE_INPUT;
 	LL_TIM_BDTR_Init(TIM1, &TIM_BDTRInitStruct);
+
+	LL_TIM_IC_SetActiveInput(TIM1, LL_TIM_CHANNEL_CH3, LL_TIM_ACTIVEINPUT_DIRECTTI);
+	LL_TIM_IC_SetActiveInput(TIM1, LL_TIM_CHANNEL_CH4, LL_TIM_ACTIVEINPUT_INDIRECTTI);
+	LL_TIM_CC_EnableChannel(TIM1, LL_TIM_CHANNEL_CH3);
+	LL_TIM_CC_EnableChannel(TIM1, LL_TIM_CHANNEL_CH4);
+	LL_TIM_EnableIT_CC3(TIM1);
+	LL_TIM_EnableIT_CC4(TIM1);
+	LL_TIM_EnableCounter(TIM1);
 }
 
 void PulseDetector::shutdown()
@@ -70,16 +78,14 @@ void PulseDetector::handleInterrupt()
 {
 	LL_TIM_ClearFlag_UPDATE(TIM1);
 
-	LL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);
-
 	if(LL_TIM_IsActiveFlag_CC3(TIM1))
 	{
 		mEdgeHigh = LL_TIM_IC_GetCaptureCH3(TIM1);
 		if(!mSyncOnRisingFlank)
 		{
 			LL_TIM_SetCounter(TIM1, 0);
-			if(mPulseCallback)
-				mPulseCallback->notify();
+			if(mCallback)
+				mCallback->notify();
 		}
 	}
 
@@ -89,8 +95,8 @@ void PulseDetector::handleInterrupt()
 		if(mSyncOnRisingFlank)
 		{
 			LL_TIM_SetCounter(TIM1, 0);
-			if(mPulseCallback)
-				mPulseCallback->notify();
+			if(mCallback)
+				mCallback->notify();
 		}
 	}
 
