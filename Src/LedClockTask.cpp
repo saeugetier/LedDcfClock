@@ -29,6 +29,11 @@ LedClockTask::LedClockTask(PeripheralReference<RtcClock> clock,
 		mCurrentSignalizationTimeout(0),
 		mCurrentSignalizationType(SignalizationType::NONE)
 {
+
+}
+
+void LedClockTask::setup()
+{
 	setTaskMode(TaskMode::SLEEP);
 }
 

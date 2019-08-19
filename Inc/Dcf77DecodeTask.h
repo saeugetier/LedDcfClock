@@ -20,7 +20,11 @@
 class Dcf77DecodeTask : public Task
 {
 public:
-	Dcf77DecodeTask(PeripheralReference<PulseDetector> detector, PeripheralReference<RtcClock> clock, PeripheralReference<DcfWakeup> wake, PeripheralReference<DcfPowerdown> power);
+	Dcf77DecodeTask(PeripheralReference<PulseDetector> detector,
+			PeripheralReference<RtcClock> clock,
+			PeripheralReference<DcfWakeup> wake,
+			PeripheralReference<DcfPowerdown> power);
+	virtual void setup();
 	virtual void run();
 	virtual void handleEvent(EventType::type event);
 	Event& getWakeupEvent() {return mDcfWakeupEvent;}

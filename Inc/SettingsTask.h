@@ -21,6 +21,7 @@ public:
 	SettingsTask(PeripheralReference<Settings1Button> settings1Button,
 				PeripheralReference<Settings2Button> settings2Button,
 				Callback* settingsChangeCallback, Settings* settings);
+	virtual void setup();
 	virtual void run();
 	virtual void handleEvent(EventType::type event);
 	virtual EventList getEvents();

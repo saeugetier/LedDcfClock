@@ -17,6 +17,11 @@ SettingsTask::SettingsTask(PeripheralReference<Settings1Button> settings1Button,
 				mSettingsChangedCallback(settingsChangeCallback),
 				mSettings(settings)
 {
+
+}
+
+void SettingsTask::setup()
+{
 	setTaskMode(TaskMode::DEEPSLEEP);
 }
 

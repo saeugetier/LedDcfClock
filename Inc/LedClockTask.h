@@ -26,6 +26,7 @@ public:
 			PeripheralReference<SystemTick> tick,
 			PeripheralReference<LedPowerEnable> power,
 			Settings& settings);
+	virtual void setup();
 	virtual void run();
 	virtual void handleEvent(EventType::type event);
 	Event& getTickEvent() { return mSystemTimerEvent; }

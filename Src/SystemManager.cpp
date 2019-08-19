@@ -42,6 +42,11 @@ SystemManager::SystemManager() :
 	mTaskManager.addTask(&mDcf77DecodeTask);
 	mTaskManager.addTask(&mLedClockTask);
 	mTaskManager.addTask(&mSettingsTask);
+
+	mPowerSupervisorTask.setup();
+	mDcf77DecodeTask.setup();
+	mLedClockTask.setup();
+	mSettingsTask.setup();
 }
 
 void SystemManager::runTasks()

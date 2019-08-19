@@ -22,6 +22,7 @@ public:
 	PowerSupervisorTask(PeripheralReference<PowerSource> source,
 			PeripheralReference<SupplyVoltageSupervisor> supervisor,
 			Callback* undervoltageCallback);
+	virtual void setup();
 	virtual void run();
 	virtual void handleEvent(EventType::type event);
 	virtual EventList getEvents();

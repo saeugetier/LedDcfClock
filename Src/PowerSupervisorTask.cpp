@@ -15,6 +15,11 @@ PowerSupervisorTask::PowerSupervisorTask(PeripheralReference<PowerSource> source
 	mSupplyVoltageLevelEvent(this, static_cast<EventType::type>(SystemEventType::SUPPLY_VOLTAGE_LEVEL)),
 	mPowerSourceChanged(this, static_cast<EventType::type>(SystemEventType::POWER_SOURCE_CHANGED))
 {
+
+}
+
+void PowerSupervisorTask::setup()
+{
 	setTaskMode(TaskMode::DEEPSLEEP);
 }
 
