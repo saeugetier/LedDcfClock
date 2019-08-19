@@ -16,12 +16,14 @@ DcfWakeup::DcfWakeup()
 {
 	mPeripheralInstance = this;
 	LL_PWR_EnableWakeUpPin(LL_PWR_WAKEUP_PIN6);
+	LL_PWR_SetWakeUpPinPolarityLow(LL_PWR_WAKEUP_PIN6);
 }
 
 void DcfWakeup::initialize()
 {
-	LL_IOP_GRP1_EnableClock(LL_IOP_GRP1_PERIPH_GPIOB);
 	LL_EXTI_InitTypeDef EXTI_InitStruct = { 0 };
+	LL_IOP_GRP1_EnableClock(LL_IOP_GRP1_PERIPH_GPIOB);
+
 	LL_EXTI_SetEXTISource(LL_EXTI_CONFIG_PORTB, LL_EXTI_CONFIG_LINE5);
 	EXTI_InitStruct.Line_0_31 = LL_EXTI_LINE_5;
 	EXTI_InitStruct.LineCommand = ENABLE;
@@ -33,10 +35,19 @@ void DcfWakeup::initialize()
 
 	NVIC_EnableIRQ (EXTI4_15_IRQn);
 	NVIC_SetPriority(EXTI4_15_IRQn, 0);
+
+	if(LL_PWR_IsActiveFlag_WU6())
+	{
+		LL_PWR_ClearFlag_WU6();
+		if(mCallback != nullptr)
+			mCallback->notify();
+	}
 }
 
 void DcfWakeup::shutdown()
 {
+	LL_EXTI_DisableRisingTrig_0_31(LL_EXTI_LINE_5);
+
 	LL_GPIO_SetPinMode(DCF_IN_GPIO_Port, DCF_IN_Pin, LL_GPIO_MODE_ANALOG);
 }
 
