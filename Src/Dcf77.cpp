@@ -103,6 +103,13 @@ inline void DCF77::bufferinit(void)
 
 void DCF77::decode(uint32_t risingEdgeTime, uint32_t fallingEdgeTime)
 {
+	if(risingEdgeTime > DCFSyncTime * 5 || fallingEdgeTime > DCFSyncTime * 5)
+	{ //reject
+		leadingEdge = 0;
+		trailingEdge = 0;
+		return;
+	}
+
 	if(pulseStart == HIGH)
 	{
 		trailingEdge = leadingEdge + fallingEdgeTime; //add last leading edge time
