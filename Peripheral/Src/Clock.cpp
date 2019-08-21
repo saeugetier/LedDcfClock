@@ -86,9 +86,7 @@ uint16_t RtcClock::getSubsecond()
 void RtcClock::calibrate(time_t time, uint16_t subseconds)
 {
 	time_t currentTime = now();
-	//time_t lastCalibrationTime = mSettings->getLastCalibrationTimestamp();
 	uint16_t currentSubseconds = LL_RTC_TIME_GetSubSecond(RTC);
-	mSettings->setLastCalibrationTimestamp(time);
 
 	int16_t subsecondDifference = currentSubseconds - subseconds;
 	int32_t secondDifference = currentTime - time;

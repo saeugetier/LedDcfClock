@@ -26,7 +26,6 @@ public:
 
 	void setAlarmMode(Alarm);
 protected:
-	Settings* mSettings;
 	void applyCorrectionValue(int32_t correction_value);
 	virtual void initialize();
 	virtual void shutdown();
