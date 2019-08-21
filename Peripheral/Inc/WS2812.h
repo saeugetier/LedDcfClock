@@ -149,6 +149,7 @@ protected:
 		LL_TIM_OC_DisableFast(TIM3, LL_TIM_CHANNEL_CH3);
 		LL_TIM_SetTriggerOutput(TIM3, LL_TIM_TRGO_RESET);
 		LL_TIM_DisableMasterSlaveMode(TIM3);
+
 		LL_IOP_GRP1_EnableClock(LL_IOP_GRP1_PERIPH_GPIOB);
 		/**TIM3 GPIO Configuration
 		PB0     ------> TIM3_CH3
@@ -160,6 +161,20 @@ protected:
 		GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
 		GPIO_InitStruct.Alternate = LL_GPIO_AF_1;
 		LL_GPIO_Init(WS2812_GPIO_Port, &GPIO_InitStruct);
+
+		LL_TIM_OC_SetCompareCH1(TIM3, 0);
+		LL_TIM_EnableCounter(TIM3);
+		for(int i = 0; i < 3000; i++);
+		LL_TIM_DisableCounter(TIM3);
+
+		LL_TIM_ClearFlag_UPDATE(TIM3);
+
+		LL_TIM_ConfigDMABurst(TIM3, LL_TIM_DMABURST_BASEADDR_CCR3, LL_TIM_DMABURST_LENGTH_1TRANSFER);
+		LL_TIM_CC_EnableChannel(TIM3, LL_TIM_CHANNEL_CH3);
+		LL_TIM_EnableAllOutputs(TIM3);
+		LL_TIM_SetUpdateSource(TIM3, LL_TIM_UPDATESOURCE_COUNTER);
+		LL_TIM_EnableCounter(TIM3);
+		LL_TIM_EnableDMAReq_UPDATE(TIM3);
 	}
 
 	void TIM3_DeInit()
@@ -196,13 +211,13 @@ protected:
 	{
 		LL_DMA_ClearFlag_TC1(DMA1);
 
-		LL_TIM_DisableCounter(TIM1);
+		LL_TIM_DisableCounter(TIM3);
 		LL_DMA_DisableChannel(DMA1, LL_DMA_CHANNEL_1);
 		LL_DMA_ConfigAddresses(DMA1, LL_DMA_CHANNEL_1, (uint32_t)&mDmaBuffer, (uint32_t)&TIM3->DMAR, LL_DMA_GetDataTransferDirection(DMA1, LL_DMA_CHANNEL_1));
 		LL_DMA_SetDataLength(DMA1, LL_DMA_CHANNEL_1, sizeof(mDmaBuffer)/sizeof(uint32_t));
 
 		LL_DMA_EnableChannel(DMA1, LL_DMA_CHANNEL_1);
-		LL_TIM_EnableCounter(TIM1);
+		LL_TIM_EnableCounter(TIM3);
 	}
 };
 
