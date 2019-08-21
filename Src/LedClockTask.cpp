@@ -66,6 +66,9 @@ void LedClockTask::handleEvent(EventType::type event)
 		stopSignalization();
 		setTaskMode(TaskMode::DEEPSLEEP);
 		break;
+	case SystemEventType::SETTINGS_CHANGED:
+		// TODO
+		break;
 	default:
 		break;
 	}
@@ -104,7 +107,7 @@ bool LedClockTask::signalizeLeds()
 
 	if(mLedClock.isReady() && !(mCurrentSignalizationTimeout % 20)) //every 20ms
 	{
-		mLedClock.setBrightness(mSettings.getBrightness());
+		//mLedClock.setBrightness(mSettings.getBrightness());
 
 		if(mCurrentSignalizationType == SignalizationType::TIME)
 		{
