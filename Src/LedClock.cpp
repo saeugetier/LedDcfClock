@@ -56,15 +56,15 @@ void LedClock::displayError(Error error)
 	mLeds.getInstance().clearBuffer();
 	if(error == Error::HARDWARE_FAULT)
 	{
-		mLeds.getInstance().setPixelColor(RGB(0,255,255), 0);
-		mLeds.getInstance().setPixelColor(RGB(0,255,255), 20);
-		mLeds.getInstance().setPixelColor(RGB(0,255,255), 40);
+		mLeds.getInstance().setPixelColor(RGB(0,128,128), 0);
+		mLeds.getInstance().setPixelColor(RGB(0,128,128), 20);
+		mLeds.getInstance().setPixelColor(RGB(0,128,128), 40);
 	}
 	else if(error == Error::TIME_NOT_SET)
 	{
-		mLeds.getInstance().setPixelColor(RGB(255,255,0), 0);
-		mLeds.getInstance().setPixelColor(RGB(255,255,0), 20);
-		mLeds.getInstance().setPixelColor(RGB(255,255,0), 40);
+		mLeds.getInstance().setPixelColor(RGB(128,128,0), 0);
+		mLeds.getInstance().setPixelColor(RGB(128,128,0), 20);
+		mLeds.getInstance().setPixelColor(RGB(128,128,0), 40);
 	}
 	mLeds.getInstance().showLeds();
 }
