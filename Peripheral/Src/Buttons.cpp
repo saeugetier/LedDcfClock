@@ -58,11 +58,18 @@ void PushButton::initialize()
 	EXTI_InitStruct.Mode = LL_EXTI_MODE_IT;
 	EXTI_InitStruct.Trigger = LL_EXTI_TRIGGER_FALLING;
 	LL_EXTI_Init(&EXTI_InitStruct);
-	LL_GPIO_SetPinPull(PUSHBUTTON_GPIO_Port, PUSHBUTTON_Pin, LL_GPIO_PULL_NO);
+	LL_GPIO_SetPinPull(PUSHBUTTON_GPIO_Port, PUSHBUTTON_Pin, LL_GPIO_PULL_UP);
 	LL_GPIO_SetPinMode(PUSHBUTTON_GPIO_Port, PUSHBUTTON_Pin, LL_GPIO_MODE_INPUT);
 
 	NVIC_EnableIRQ (EXTI0_1_IRQn);
 	NVIC_SetPriority(EXTI0_1_IRQn, 0);
+
+	if(LL_PWR_IsActiveFlag_WU1() && !LL_GPIO_IsInputPinSet(PUSHBUTTON_GPIO_Port, PUSHBUTTON_Pin))
+	{
+		LL_PWR_ClearFlag_WU1();
+		if(mCallback != nullptr)
+			mCallback->notify();
+	}
 }
 
 void PushButton::shutdown()
@@ -80,7 +87,7 @@ Settings1Button::Settings1Button()
 
 void Settings1Button::clearWakeupFlag()
 {
-	LL_PWR_ClearFlag_WU1();
+	LL_PWR_ClearFlag_WU2();
 }
 
 void Settings1Button::handleInterrupt()
@@ -110,11 +117,18 @@ void Settings1Button::initialize()
 	EXTI_InitStruct.Mode = LL_EXTI_MODE_IT;
 	EXTI_InitStruct.Trigger = LL_EXTI_TRIGGER_RISING_FALLING;
 	LL_EXTI_Init(&EXTI_InitStruct);
-	LL_GPIO_SetPinPull(SETTINGS1_GPIO_Port, SETTINGS1_Pin, LL_GPIO_PULL_NO);
+	LL_GPIO_SetPinPull(SETTINGS1_GPIO_Port, SETTINGS1_Pin, LL_GPIO_PULL_UP);
 	LL_GPIO_SetPinMode(SETTINGS1_GPIO_Port, SETTINGS1_Pin, LL_GPIO_MODE_INPUT);
 
 	NVIC_EnableIRQ (EXTI4_15_IRQn);
 	NVIC_SetPriority(EXTI4_15_IRQn, 0);
+
+	if(LL_PWR_IsActiveFlag_WU2() && !LL_GPIO_IsInputPinSet(SETTINGS1_GPIO_Port, SETTINGS1_Pin))
+	{
+		LL_PWR_ClearFlag_WU2();
+		if(mCallback != nullptr)
+			mCallback->notify();
+	}
 }
 
 void Settings1Button::shutdown()
@@ -132,7 +146,7 @@ Settings2Button::Settings2Button()
 
 void Settings2Button::clearWakeupFlag()
 {
-	LL_PWR_ClearFlag_WU1();
+	LL_PWR_ClearFlag_WU4();
 }
 
 void Settings2Button::handleInterrupt()
@@ -162,11 +176,18 @@ void Settings2Button::initialize()
 	EXTI_InitStruct.Mode = LL_EXTI_MODE_IT;
 	EXTI_InitStruct.Trigger = LL_EXTI_TRIGGER_FALLING;
 	LL_EXTI_Init(&EXTI_InitStruct);
-	LL_GPIO_SetPinPull(SETTINGS2_GPIO_Port, SETTINGS2_Pin, LL_GPIO_PULL_NO);
+	LL_GPIO_SetPinPull(SETTINGS2_GPIO_Port, SETTINGS2_Pin, LL_GPIO_PULL_UP);
 	LL_GPIO_SetPinMode(SETTINGS2_GPIO_Port, SETTINGS2_Pin, LL_GPIO_MODE_INPUT);
 
 	NVIC_EnableIRQ (EXTI2_3_IRQn);
 	NVIC_SetPriority(EXTI2_3_IRQn, 0);
+
+	if(LL_PWR_IsActiveFlag_WU4() && !LL_GPIO_IsInputPinSet(SETTINGS2_GPIO_Port, SETTINGS2_Pin))
+	{
+		LL_PWR_ClearFlag_WU4();
+		if(mCallback != nullptr)
+			mCallback->notify();
+	}
 }
 
 void Settings2Button::shutdown()
