@@ -30,6 +30,9 @@
 #include "LedClock.h"
 #include "Dcf77.h"
 #include "SystemManager.h"
+#ifdef DEBUG
+#include "SEGGER_RTT.h"
+#endif
 
 extern "C"
 {
@@ -65,6 +68,13 @@ int main(void)
   LL_GPIO_SetOutputPin(LED2_GPIO_Port, LED2_Pin);
 
   SystemManager manager;
+
+#ifdef DEBUG
+  SEGGER_RTT_ConfigUpBuffer(0, NULL, NULL, 0, SEGGER_RTT_MODE_NO_BLOCK_SKIP);
+
+  SEGGER_RTT_WriteString(0, "SEGGER Real-Time-Terminal Sample\r\n\r\n");
+  SEGGER_RTT_WriteString(0, "###### Testing SEGGER_printf() ######\r\n");
+#endif
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */

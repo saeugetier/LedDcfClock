@@ -112,10 +112,15 @@ void TaskManager::runTasks()
 		}
 	}
 
+#ifndef DEBUG
 	if (taskModeLevel == TaskMode::SLEEP)
 		sleep();
 	else if (taskModeLevel == TaskMode::DEEPSLEEP)
 		deepSleep();
+#else
+	if (taskModeLevel == TaskMode::DEEPSLEEP)
+		deepSleep();
+#endif
 }
 
 void TaskManager::sleep()

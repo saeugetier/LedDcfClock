@@ -6,6 +6,9 @@
  */
 
 #include "LedClock.h"
+#ifdef DEBUG
+#include "SEGGER_RTT.h"
+#endif
 
 LedClock::LedClock(PeripheralReference<WS2812<60 + 12>> leds, PeripheralReference<LedPowerEnable> power) :
 	mLeds(leds), mPowerEnable(power), mBrightness(255)
@@ -19,6 +22,7 @@ LedClock::~LedClock()
 
 void LedClock::displayTime(const tm &time, bool displaySeconds, uint8_t subsecond)
 {
+	static int last_second = 0;
 	mLeds.getInstance().clearBuffer();
 
 	//correct phase by 180°
@@ -28,6 +32,12 @@ void LedClock::displayTime(const tm &time, bool displaySeconds, uint8_t subsecon
 
 	if(subsecond > 128)
 		subsecond = 128;
+
+	if(last_second != second)
+	{
+		SEGGER_RTT_printf(0, "second: %d\r\n", second);
+		last_second = second;
+	}
 
 	int brightness_subsecond = ((int)subsecond * mBrightness) / 128;
 

@@ -29,6 +29,8 @@ void RtcClock::initialize()
 		RTC_InitStruct.SynchPrescaler = 255;
 		LL_RTC_Init(RTC, &RTC_InitStruct);
 
+		LL_RTC_TIME_SetFormat(RTC, LL_RTC_FORMAT_BIN);
+
 		/** Enable the Alarm A
 		 */
 		RTC_AlarmStruct.AlarmTime.Hours = 0x0;

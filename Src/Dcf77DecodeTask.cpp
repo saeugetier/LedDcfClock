@@ -7,6 +7,7 @@
 
 #include "Dcf77DecodeTask.h"
 #include "SystemManager.h"
+#include "SEGGER_RTT.h"
 
 Dcf77DecodeTask::Dcf77DecodeTask(PeripheralReference<PulseDetector> detector,
 		PeripheralReference<RtcClock> clock,
@@ -39,18 +40,27 @@ void Dcf77DecodeTask::handleEvent(EventType::type event)
 	SystemEventType::type _event = static_cast<SystemEventType::type>(event);
 	time_t time;
 
-
+	uint32_t high;
+	uint32_t low;
 	switch (_event)
 	{
 	case SystemEventType::type::DCF_WAKE_UP:
 		setTaskMode(TaskMode::SLEEP);
 		break;
 	case SystemEventType::type::DCF_PULSE:
-		mDcfDecoder.decode(mPulseDetector.getInstance().getHighEdge(), mPulseDetector.getInstance().getLowEdge());
+		high = mPulseDetector.getInstance().getHighEdge();
+		low = mPulseDetector.getInstance().getLowEdge();
+#ifdef DEBUG
+		SEGGER_RTT_printf(0, "low: %u\r\n", low);
+		SEGGER_RTT_printf(0, "high: %u\r\n", high);
+		SEGGER_RTT_printf(0, "diff: %u\r\n", high-low);
+#endif
+		mDcfDecoder.decode(high,low);
 		time = mDcfDecoder.getTime();
 		// time != 0 when new timestamp is available
 		if(time != 0)
 		{
+			SEGGER_RTT_printf(0, "synced\r\n");
 			if(!mRtcClock.getInstance().isClockSet())
 				mRtcClock.getInstance().setTime(time, mDcfDecoder.getMedianSubsecond());
 			else
