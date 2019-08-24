@@ -108,6 +108,8 @@ bool Settings1Button::getButtonPressed()
 
 void Settings1Button::initialize()
 {
+	//Buttons should be readout via timer (debounced)
+	/*
 	LL_EXTI_InitTypeDef EXTI_InitStruct = {0};
 	LL_IOP_GRP1_EnableClock(LL_IOP_GRP1_PERIPH_GPIOA);
 
@@ -121,7 +123,7 @@ void Settings1Button::initialize()
 	LL_GPIO_SetPinMode(SETTINGS1_GPIO_Port, SETTINGS1_Pin, LL_GPIO_MODE_INPUT);
 
 	NVIC_EnableIRQ (EXTI4_15_IRQn);
-	NVIC_SetPriority(EXTI4_15_IRQn, 0);
+	NVIC_SetPriority(EXTI4_15_IRQn, 0);*/
 
 	if(LL_PWR_IsActiveFlag_WU2() && !LL_GPIO_IsInputPinSet(SETTINGS1_GPIO_Port, SETTINGS1_Pin))
 	{
@@ -167,6 +169,8 @@ bool Settings2Button::getButtonPressed()
 
 void Settings2Button::initialize()
 {
+	//Buttons should be readout via timer (debounced)
+	/*
 	LL_EXTI_InitTypeDef EXTI_InitStruct = {0};
 	LL_IOP_GRP1_EnableClock(LL_IOP_GRP1_PERIPH_GPIOA);
 
@@ -180,7 +184,7 @@ void Settings2Button::initialize()
 	LL_GPIO_SetPinMode(SETTINGS2_GPIO_Port, SETTINGS2_Pin, LL_GPIO_MODE_INPUT);
 
 	NVIC_EnableIRQ (EXTI2_3_IRQn);
-	NVIC_SetPriority(EXTI2_3_IRQn, 0);
+	NVIC_SetPriority(EXTI2_3_IRQn, 0);*/
 
 	if(LL_PWR_IsActiveFlag_WU4() && !LL_GPIO_IsInputPinSet(SETTINGS2_GPIO_Port, SETTINGS2_Pin))
 	{

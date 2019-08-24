@@ -24,7 +24,7 @@ void DcfPowerdown::initialize()
 	EXTI_InitStruct.Line_0_31 = LL_EXTI_LINE_4;
 	EXTI_InitStruct.LineCommand = ENABLE;
 	EXTI_InitStruct.Mode = LL_EXTI_MODE_IT;
-	EXTI_InitStruct.Trigger = LL_EXTI_TRIGGER_RISING_FALLING;
+	EXTI_InitStruct.Trigger = LL_EXTI_TRIGGER_FALLING;
 	LL_EXTI_Init(&EXTI_InitStruct);
 	LL_GPIO_SetPinPull(PON_IN_GPIO_Port, PON_IN_Pin, LL_GPIO_PULL_NO);
 	LL_GPIO_SetPinMode(PON_IN_GPIO_Port, PON_IN_Pin, LL_GPIO_MODE_INPUT);
