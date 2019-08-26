@@ -5,7 +5,7 @@
 template<>
 PulseDetector* InterruptPeripheral<PulseDetector>::mPeripheralInstance = nullptr;
 
-PulseDetector::PulseDetector(bool SyncOnRisingFlank) : mTimeoutCallback(nullptr)
+PulseDetector::PulseDetector(bool SyncOnRisingFlank) : mTimeoutCallback(nullptr), mTimeoutRequested(false)
 {
 	mPeripheralInstance = this;
 	mSyncOnRisingFlank = SyncOnRisingFlank;
@@ -36,8 +36,8 @@ void PulseDetector::initialize()
 	NVIC_SetPriority(TIM1_CC_IRQn, 0);
 	NVIC_EnableIRQ(TIM1_CC_IRQn);
 
-	NVIC_SetPriority(TIM1_BRK_UP_TRG_COM_IRQn, 1);
-	NVIC_EnableIRQ(TIM1_BRK_UP_TRG_COM_IRQn);
+	//NVIC_SetPriority(TIM1_BRK_UP_TRG_COM_IRQn, 1);
+	//NVIC_EnableIRQ(TIM1_BRK_UP_TRG_COM_IRQn);
 
 	TIM_InitStruct.Prescaler = 16000;
 	TIM_InitStruct.CounterMode = LL_TIM_COUNTERMODE_UP;
@@ -45,7 +45,7 @@ void PulseDetector::initialize()
 	TIM_InitStruct.ClockDivision = LL_TIM_CLOCKDIVISION_DIV1;
 	TIM_InitStruct.RepetitionCounter = 0;
 	LL_TIM_Init(TIM1, &TIM_InitStruct);
-	LL_TIM_DisableARRPreload(TIM1);
+	LL_TIM_EnableARRPreload(TIM1);
 	LL_TIM_SetClockSource(TIM1, LL_TIM_CLOCKSOURCE_INTERNAL);
 	LL_TIM_SetTriggerOutput(TIM1, LL_TIM_TRGO_RESET);
 	LL_TIM_SetTriggerOutput2(TIM1, LL_TIM_TRGO2_RESET);
@@ -62,14 +62,16 @@ void PulseDetector::initialize()
 	TIM_BDTRInitStruct.Break2AFMode = LL_TIM_BREAK_AFMODE_INPUT;
 	LL_TIM_BDTR_Init(TIM1, &TIM_BDTRInitStruct);
 
+	LL_TIM_ClearFlag_UPDATE(TIM1);
 	LL_TIM_IC_SetActiveInput(TIM1, LL_TIM_CHANNEL_CH3, LL_TIM_ACTIVEINPUT_DIRECTTI);
 	LL_TIM_IC_SetActiveInput(TIM1, LL_TIM_CHANNEL_CH4, LL_TIM_ACTIVEINPUT_INDIRECTTI);
 	LL_TIM_CC_EnableChannel(TIM1, LL_TIM_CHANNEL_CH3);
 	LL_TIM_CC_EnableChannel(TIM1, LL_TIM_CHANNEL_CH4);
 	LL_TIM_EnableIT_CC3(TIM1);
 	LL_TIM_EnableIT_CC4(TIM1);
-	LL_TIM_EnableIT_UPDATE(TIM1);
+	//LL_TIM_EnableIT_UPDATE(TIM1);
 	LL_TIM_EnableCounter(TIM1);
+	LL_TIM_ClearFlag_UPDATE(TIM1);
 }
 
 void PulseDetector::shutdown()
@@ -80,6 +82,8 @@ void PulseDetector::shutdown()
 
 void PulseDetector::handleInterrupt()
 {
+	mTimeoutRequested = false;
+
 	LL_TIM_ClearFlag_UPDATE(TIM1);
 
 	if(LL_TIM_IsActiveFlag_CC3(TIM1))
@@ -111,6 +115,8 @@ void PulseDetector::handleInterrupt()
 	LL_TIM_ClearFlag_CC3OVR(TIM1);
 
 	LL_TIM_ClearFlag_CC4OVR(TIM1);
+
+	LL_TIM_ClearFlag_UPDATE(TIM1);
 }
 
 uint32_t PulseDetector::getLowEdge()
@@ -127,8 +133,15 @@ void PulseDetector::handleTimeoutInterrupt()
 {
 	LL_TIM_ClearFlag_UPDATE(TIM1);
 
-	if(mTimeoutCallback != nullptr)
-		mTimeoutCallback->notify();
+	if(mTimeoutRequested)
+	{
+		if(mTimeoutCallback != nullptr)
+			mTimeoutCallback->notify();
+
+		mTimeoutRequested = false;
+	}
+	else
+		mTimeoutRequested = true;
 }
 
 void PulseDetector::registerTimeoutCallback(Callback* callback)

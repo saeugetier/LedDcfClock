@@ -30,8 +30,13 @@ extern "C"
 {
 void TIM1_BRK_UP_TRG_COM_IRQHandler()
 {
-	if(PulseDetector::getInstance() != nullptr)
-		PulseDetector::getInstance()->handleTimeoutInterrupt();
+	if(!LL_TIM_IsActiveFlag_CC3(TIM1) && !LL_TIM_IsActiveFlag_CC4(TIM1) && LL_TIM_IsActiveFlag_UPDATE(TIM1))
+	{
+		if(PulseDetector::getInstance() != nullptr)
+			PulseDetector::getInstance()->handleTimeoutInterrupt();
+	}
+
+	LL_TIM_ClearFlag_UPDATE(TIM1);
 }
 }
 

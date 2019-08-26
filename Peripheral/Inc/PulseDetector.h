@@ -22,6 +22,7 @@ protected:
 	Callback* mTimeoutCallback;
 
 	bool mSyncOnRisingFlank;
+	bool mTimeoutRequested;
 };
 
 #endif /* PERIPHERAL_INC_PULSEDETECTOR_H_ */
