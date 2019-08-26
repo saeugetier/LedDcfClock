@@ -28,6 +28,15 @@ void TIM1_CC_IRQHandler(void)
 
 extern "C"
 {
+void TIM1_BRK_UP_TRG_COM_IRQHandler()
+{
+	if(PulseDetector::getInstance() != nullptr)
+		PulseDetector::getInstance()->handleTimeoutInterrupt();
+}
+}
+
+extern "C"
+{
 void SysTick_Handler()
 {
 	if(SystemTick::getInstance() != nullptr)

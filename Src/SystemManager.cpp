@@ -18,6 +18,7 @@ SystemManager::SystemManager() :
 		mPushButtonCallback(mTaskManager),
 		mSettings1ButtonCallback(mTaskManager),
 		mSettings2ButtonCallback(mTaskManager),
+		mDcfTimeoutCallback(mTaskManager),
 		mSettingsChangedCallback(mTaskManager),
 		mUnderVoltageCallback(mTaskManager),
 		mLedClockTask(mClock, mWS2812, mPushButton, mSystemTick, mLedPowerEnable, mSettings),
@@ -29,6 +30,7 @@ SystemManager::SystemManager() :
 	//initialize callbacks
 	mDcfPowerdown.getInstance().registerCallback(&mDcfPowerDownCallback);
 	mPulseDetector.getInstance().registerCallback(&mDcfPulseCallback);
+	mPulseDetector.getInstance().registerTimeoutCallback(&mDcfTimeoutCallback);
 	mDcfWakeup.getInstance().registerCallback(&mDcfWakeUpCallback);
 	mSystemTick.getInstance().registerCallback(&mSysTickCallback);
 	mPowerSource.getInstance().registerCallback(&mPowerSourceCallback);

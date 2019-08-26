@@ -27,9 +27,6 @@ public:
 	virtual void setup();
 	virtual void run();
 	virtual void handleEvent(EventType::type event);
-	Event& getWakeupEvent() {return mDcfWakeupEvent;}
-	Event& getPowerdownEvent() {return mDcfPowerdownEvent;}
-	Event& getPulseEvent() {return mDcfPulseEvent;}
 	virtual EventList getEvents();
 protected:
 	virtual void taskModeChanged(TaskMode mode);
@@ -42,6 +39,7 @@ protected:
 	Event mDcfWakeupEvent;
 	Event mDcfPowerdownEvent;
 	Event mDcfPulseEvent;
+	Event mDcfTimeoutEvent;
 };
 
 #endif /* INC_DCF77DECODETASK_H_ */

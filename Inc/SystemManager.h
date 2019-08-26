@@ -48,7 +48,8 @@ public:
 		SETTINGS2_BUTTON_EVENT,
 		CLOCK_ALARM_EVENT,
 		SETTINGS_CHANGED,
-		UNDERVOLTAGE_SHUTDOWN
+		UNDERVOLTAGE_SHUTDOWN,
+		DCF_TIMEOUT
 	};
 };
 
@@ -112,6 +113,7 @@ protected:
 	TaskCallback<static_cast<EventType::type>(SystemEventType::PUSH_BUTTON_EVENT)> mPushButtonCallback;
 	TaskCallback<static_cast<EventType::type>(SystemEventType::SETTINGS1_BUTTON_EVENT)> mSettings1ButtonCallback;
 	TaskCallback<static_cast<EventType::type>(SystemEventType::SETTINGS2_BUTTON_EVENT)> mSettings2ButtonCallback;
+	TaskCallback<static_cast<EventType::type>(SystemEventType::DCF_TIMEOUT)> mDcfTimeoutCallback;
 	// Callback Tasks
 	TaskCallback<static_cast<EventType::type>(SystemEventType::SETTINGS_CHANGED)> mSettingsChangedCallback;
 	TaskCallback<static_cast<EventType::type>(SystemEventType::UNDERVOLTAGE_SHUTDOWN)> mUnderVoltageCallback;

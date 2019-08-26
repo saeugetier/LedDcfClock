@@ -22,7 +22,8 @@ Dcf77DecodeTask::Dcf77DecodeTask(PeripheralReference<PulseDetector> detector,
 		mDcfDecoder(mRtcClock, false),
 		mDcfWakeupEvent(this, static_cast<EventType::type>(SystemEventType::DCF_WAKE_UP)),
 		mDcfPowerdownEvent(this, static_cast<EventType::type>(SystemEventType::DCF_POWER_DOWN)),
-		mDcfPulseEvent(this, static_cast<EventType::type>(SystemEventType::DCF_PULSE))
+		mDcfPulseEvent(this, static_cast<EventType::type>(SystemEventType::DCF_PULSE)),
+		mDcfTimeoutEvent(this, static_cast<EventType::type>(SystemEventType::DCF_TIMEOUT))
 {
 
 }
@@ -71,6 +72,7 @@ void Dcf77DecodeTask::handleEvent(EventType::type event)
 				mRtcClock.getInstance().calibrate(time, mDcfDecoder.getMedianSubsecond());
 		}
 		break;
+	case SystemEventType::type::DCF_TIMEOUT:
 	case SystemEventType::type::DCF_POWER_DOWN:
 		setTaskMode(TaskMode::DEEPSLEEP);
 		break;
@@ -106,5 +108,6 @@ EventList Dcf77DecodeTask::getEvents()
 	list.push_front(&mDcfWakeupEvent);
 	list.push_front(&mDcfPowerdownEvent);
 	list.push_front(&mDcfPulseEvent);
+	list.push_front(&mDcfTimeoutEvent);
 	return list;
 }

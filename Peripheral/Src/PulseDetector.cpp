@@ -5,7 +5,7 @@
 template<>
 PulseDetector* InterruptPeripheral<PulseDetector>::mPeripheralInstance = nullptr;
 
-PulseDetector::PulseDetector(bool SyncOnRisingFlank)
+PulseDetector::PulseDetector(bool SyncOnRisingFlank) : mTimeoutCallback(nullptr)
 {
 	mPeripheralInstance = this;
 	mSyncOnRisingFlank = SyncOnRisingFlank;
@@ -36,9 +36,12 @@ void PulseDetector::initialize()
 	NVIC_SetPriority(TIM1_CC_IRQn, 0);
 	NVIC_EnableIRQ(TIM1_CC_IRQn);
 
+	NVIC_SetPriority(TIM1_BRK_UP_TRG_COM_IRQn, 1);
+	NVIC_EnableIRQ(TIM1_BRK_UP_TRG_COM_IRQn);
+
 	TIM_InitStruct.Prescaler = 16000;
 	TIM_InitStruct.CounterMode = LL_TIM_COUNTERMODE_UP;
-	TIM_InitStruct.Autoreload = 0xFFFF;
+	TIM_InitStruct.Autoreload = 10000;
 	TIM_InitStruct.ClockDivision = LL_TIM_CLOCKDIVISION_DIV1;
 	TIM_InitStruct.RepetitionCounter = 0;
 	LL_TIM_Init(TIM1, &TIM_InitStruct);
@@ -65,6 +68,7 @@ void PulseDetector::initialize()
 	LL_TIM_CC_EnableChannel(TIM1, LL_TIM_CHANNEL_CH4);
 	LL_TIM_EnableIT_CC3(TIM1);
 	LL_TIM_EnableIT_CC4(TIM1);
+	LL_TIM_EnableIT_UPDATE(TIM1);
 	LL_TIM_EnableCounter(TIM1);
 }
 
@@ -119,4 +123,15 @@ uint32_t PulseDetector::getHighEdge()
 	return mEdgeHigh;
 }
 
+void PulseDetector::handleTimeoutInterrupt()
+{
+	LL_TIM_ClearFlag_UPDATE(TIM1);
 
+	if(mTimeoutCallback != nullptr)
+		mTimeoutCallback->notify();
+}
+
+void PulseDetector::registerTimeoutCallback(Callback* callback)
+{
+	mTimeoutCallback = callback;
+}
