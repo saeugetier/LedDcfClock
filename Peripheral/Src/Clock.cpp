@@ -29,7 +29,7 @@ void RtcClock::initialize()
 		RTC_InitStruct.SynchPrescaler = 255;
 		LL_RTC_Init(RTC, &RTC_InitStruct);
 
-		LL_RTC_TIME_SetFormat(RTC, LL_RTC_FORMAT_BIN);
+		LL_RTC_TIME_SetFormat(RTC, LL_RTC_FORMAT_BCD);
 
 		/** Enable the Alarm A
 		 */
@@ -40,7 +40,7 @@ void RtcClock::initialize()
 		RTC_AlarmStruct.AlarmDateWeekDaySel = LL_RTC_ALMA_DATEWEEKDAYSEL_DATE;
 		RTC_AlarmStruct.AlarmDateWeekDay = 0x1;
 
-		LL_RTC_ALMA_Init(RTC, LL_RTC_FORMAT_BIN, &RTC_AlarmStruct);
+		LL_RTC_ALMA_Init(RTC, LL_RTC_FORMAT_BCD, &RTC_AlarmStruct);
 		LL_RTC_SetOutputPolarity(RTC, LL_RTC_OUTPUTPOLARITY_PIN_HIGH);
 		LL_RTC_SetAlarmOutputType(RTC, LL_RTC_ALARM_OUTPUTTYPE_OPENDRAIN);
 		LL_RTC_DisableAlarmPullUp(RTC);
@@ -59,13 +59,13 @@ time_t RtcClock::now()
 	uint32_t time = LL_RTC_TIME_Get(RTC);
 	uint32_t date = LL_RTC_DATE_Get(RTC);
 
-	currentTime.tm_hour = __LL_RTC_GET_HOUR(time);
-	currentTime.tm_min = __LL_RTC_GET_MINUTE(time);
-	currentTime.tm_sec = __LL_RTC_GET_SECOND(time);
+	currentTime.tm_hour = __LL_RTC_CONVERT_BCD2BIN(__LL_RTC_GET_HOUR(time));
+	currentTime.tm_min = __LL_RTC_CONVERT_BCD2BIN(__LL_RTC_GET_MINUTE(time));
+	currentTime.tm_sec = __LL_RTC_CONVERT_BCD2BIN(__LL_RTC_GET_SECOND(time));
 
-	currentTime.tm_mday = __LL_RTC_GET_DAY(date);
-	currentTime.tm_mon = __LL_RTC_GET_MONTH(date);
-	currentTime.tm_year = __LL_RTC_GET_YEAR(date) + 2000 - 1900;
+	currentTime.tm_mday = __LL_RTC_CONVERT_BCD2BIN(__LL_RTC_GET_DAY(date));
+	currentTime.tm_mon = __LL_RTC_CONVERT_BCD2BIN(__LL_RTC_GET_MONTH(date)) - 1;
+	currentTime.tm_year = __LL_RTC_CONVERT_BCD2BIN(__LL_RTC_GET_YEAR(date)) + 2000 - 1900;
 
 	return mktime(&currentTime);
 }
@@ -150,16 +150,17 @@ bool RtcClock::setTime(time_t time, uint16_t subseconds)
 	LL_RTC_DisableWriteProtection(RTC);
 	LL_RTC_EnterInitMode(RTC);
 	// set clock
-	LL_RTC_TIME_Config(RTC, LL_RTC_HOURFORMAT_24HOUR, currentTime.tm_hour,
-			currentTime.tm_min, currentTime.tm_sec);
+	LL_RTC_TIME_Config(RTC, LL_RTC_HOURFORMAT_24HOUR,  __LL_RTC_CONVERT_BIN2BCD(currentTime.tm_hour),
+			__LL_RTC_CONVERT_BIN2BCD(currentTime.tm_min), __LL_RTC_CONVERT_BIN2BCD(currentTime.tm_sec));
 	// transform tm to rtc time
 	if (currentTime.tm_wday == 0)
 		currentTime.tm_wday = 7;
 	currentTime.tm_mon = currentTime.tm_mon + 1;
 	currentTime.tm_year = currentTime.tm_year + 1900 - 2000;
+
 	// set calendar
-	LL_RTC_DATE_Config(RTC, currentTime.tm_wday, currentTime.tm_mday,
-			currentTime.tm_mon, currentTime.tm_year);
+	LL_RTC_DATE_Config(RTC, __LL_RTC_CONVERT_BIN2BCD(currentTime.tm_wday), __LL_RTC_CONVERT_BIN2BCD(currentTime.tm_mday),
+			__LL_RTC_CONVERT_BIN2BCD(currentTime.tm_mon), __LL_RTC_CONVERT_BIN2BCD(currentTime.tm_year));
 	LL_RTC_DisableInitMode(RTC);
 	// synchronize subseconds
 	int32_t difference = temp_subsecond - subseconds;
