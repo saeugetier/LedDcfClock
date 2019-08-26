@@ -7,7 +7,9 @@
 
 #include "Dcf77DecodeTask.h"
 #include "SystemManager.h"
+#ifdef DEBUG
 #include "SEGGER_RTT.h"
+#endif
 
 Dcf77DecodeTask::Dcf77DecodeTask(PeripheralReference<PulseDetector> detector,
 		PeripheralReference<RtcClock> clock,
@@ -60,7 +62,9 @@ void Dcf77DecodeTask::handleEvent(EventType::type event)
 		// time != 0 when new timestamp is available
 		if(time != 0)
 		{
+#ifdef DEBUG
 			SEGGER_RTT_printf(0, "synced\r\n");
+#endif
 			if(!mRtcClock.getInstance().isClockSet())
 				mRtcClock.getInstance().setTime(time, mDcfDecoder.getMedianSubsecond());
 			else
