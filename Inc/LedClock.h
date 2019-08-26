@@ -23,7 +23,7 @@ public:
 	};
 	LedClock(PeripheralReference<WS2812<60 + 12>> leds, PeripheralReference<LedPowerEnable> power);
 	~LedClock();
-	void displayTime(const tm &time, bool displaySeconds  = false, uint8_t subsecond = 0);
+	void displayTime(const tm &time, bool displaySeconds  = false, uint16_t subsecond = 0);
 	void displayError(Error error);
 	void setPower(bool on);
 	bool isReady();

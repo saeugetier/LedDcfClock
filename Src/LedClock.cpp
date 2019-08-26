@@ -20,9 +20,11 @@ LedClock::~LedClock()
 	setPower(false);
 }
 
-void LedClock::displayTime(const tm &time, bool displaySeconds, uint8_t subsecond)
+void LedClock::displayTime(const tm &time, bool displaySeconds, uint16_t subsecond)
 {
+#ifdef DEBUG
 	static int last_second = 0;
+#endif
 	mLeds.getInstance().clearBuffer();
 
 	//correct phase by 180°
@@ -30,20 +32,21 @@ void LedClock::displayTime(const tm &time, bool displaySeconds, uint8_t subsecon
 	int minute = (time.tm_min + 30) % 60;
 	int hour = (time.tm_hour + 6) % 12;
 
-	if(subsecond > 128)
-		subsecond = 128;
-
+#ifdef DEBUG
 	if(last_second != second)
 	{
 		SEGGER_RTT_printf(0, "second: %d\r\n", second);
 		last_second = second;
 	}
+#endif
 
-	int brightness_subsecond = ((int)subsecond * mBrightness) / 128;
+	//int brightness_subsecond = ((int)subsecond * (int)mBrightness) / 255;
 
 	//second and minutes are using the inner LEDs
-	mLeds.getInstance().setPixelColor(RGB(0,0,brightness_subsecond), second);
-	mLeds.getInstance().setPixelColor(RGB(0,0,mBrightness-brightness_subsecond), (second + 1) % 60);
+	//mLeds.getInstance().setPixelColor(RGB(0,0,brightness_subsecond), second);
+	//mLeds.getInstance().setPixelColor(RGB(0,0,mBrightness-brightness_subsecond), (second + 1) % 60);
+
+	mLeds.getInstance().setPixelColor(RGB(0,0,mBrightness), second);
 	mLeds.getInstance().setPixelColor(RGB(mBrightness,0,mLeds.getInstance().getPixelColor(minute).b), minute);
 	//hours using the uppper LED ring
 	mLeds.getInstance().setPixelColor(RGB(0,mBrightness,0), 60 + hour);
