@@ -69,7 +69,7 @@ void TaskManager::addEvent(Event* event)
 
 void TaskManager::runTasks()
 {
-	TaskMode taskModeLevel = TaskMode::NONE;
+	volatile TaskMode taskModeLevel = TaskMode::NONE;
 
 	//execute events first
 	for(int i = 0; i < MAX_EVENTS; i++)
@@ -112,15 +112,11 @@ void TaskManager::runTasks()
 		}
 	}
 
-#ifndef DEBUG
+
 	if (taskModeLevel == TaskMode::SLEEP)
-		sleep();
+		this->sleep();
 	else if (taskModeLevel == TaskMode::DEEPSLEEP)
-		deepSleep();
-#else
-	if (taskModeLevel == TaskMode::DEEPSLEEP)
-		deepSleep();
-#endif
+		this->deepSleep();
 }
 
 void TaskManager::sleep()
