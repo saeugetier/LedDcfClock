@@ -15,6 +15,7 @@ TaskManager::TaskManager() : mInvokedEvents {EventType::NONE}
 {
 	memset(mTaskList, 0, sizeof(mTaskList));
 	memset(mEventList, 0, sizeof(mEventList));
+	memset(mInvokedEvents, EventType::NONE, sizeof(mInvokedEvents));
 }
 
 void TaskManager::invokeEvent(EventType::type event)
