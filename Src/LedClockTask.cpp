@@ -80,6 +80,7 @@ void LedClockTask::taskModeChanged(TaskMode mode)
 
 	switch (mode)
 	{
+	case TaskMode::WAKE:
 	case TaskMode::SLEEP:
 		mSystemTick.init();
 		mClock.init();

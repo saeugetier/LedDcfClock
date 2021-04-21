@@ -49,6 +49,9 @@ void Dcf77DecodeTask::handleEvent(EventType::type event)
 	{
 	case SystemEventType::type::DCF_WAKE_UP:
 		setTaskMode(TaskMode::SLEEP);
+#ifdef DEBUG
+		SEGGER_RTT_printf(0, "wake up\r\n");
+#endif
 		break;
 	case SystemEventType::type::DCF_PULSE:
 		high = mPulseDetector.getInstance().getHighEdge();
@@ -74,6 +77,10 @@ void Dcf77DecodeTask::handleEvent(EventType::type event)
 		break;
 	case SystemEventType::type::DCF_TIMEOUT:
 	case SystemEventType::type::DCF_POWER_DOWN:
+#ifdef DEBUG
+		SEGGER_RTT_printf(0, "power down\r\n");
+		for(int i = 0; i < 3000; i++);
+#endif
 		setTaskMode(TaskMode::DEEPSLEEP);
 		break;
 	default:
@@ -85,6 +92,7 @@ void Dcf77DecodeTask::taskModeChanged(TaskMode mode)
 {
 	switch(mode)
 	{
+	case TaskMode::WAKE:
 	case TaskMode::SLEEP:
 		mDcfWakeup.shutdown();
 		mRtcClock.init();
