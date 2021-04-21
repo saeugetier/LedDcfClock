@@ -17,13 +17,8 @@
   ******************************************************************************
   */
 /* USER CODE END Header */
-
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "dma.h"
-#include "rtc.h"
-#include "tim.h"
-#include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -77,17 +72,15 @@ void SystemClock_Config(void)
   LL_RCC_HSI_Enable();
   while(LL_RCC_HSI_IsReady() != 1)
   {
-  };
+  }
 
   LL_PWR_EnableBkUpAccess();
-  LL_RCC_ForceBackupDomainReset();
-  LL_RCC_ReleaseBackupDomainReset();
   /* LSE configuration and activation */
   LL_RCC_LSE_SetDriveCapability(LL_RCC_LSEDRIVE_MEDIUMHIGH);
   LL_RCC_LSE_Enable();
   while(LL_RCC_LSE_IsReady() != 1)
   {
-  };
+  }
 
   /* Set AHB prescaler*/
   LL_RCC_SetAHBPrescaler(LL_RCC_SYSCLK_DIV_1);
@@ -96,16 +89,19 @@ void SystemClock_Config(void)
   LL_RCC_SetSysClkSource(LL_RCC_SYS_CLKSOURCE_HSI);
   while(LL_RCC_GetSysClkSource() != LL_RCC_SYS_CLKSOURCE_STATUS_HSI)
   {
-  };
+  }
 
   /* Set APB1 prescaler*/
   LL_RCC_SetAPB1Prescaler(LL_RCC_APB1_DIV_1);
   LL_Init1msTick(16000000);
-  LL_SYSTICK_SetClkSource(LL_SYSTICK_CLKSOURCE_HCLK);
-  LL_SetSystemCoreClock(16000000);
   /* Update CMSIS variable (which can be updated also through SystemCoreClockUpdate function) */
   LL_SetSystemCoreClock(16000000);
-  LL_RCC_SetRTCClockSource(LL_RCC_RTC_CLKSOURCE_LSE);
+  if(LL_RCC_GetRTCClockSource() != LL_RCC_RTC_CLKSOURCE_LSE)
+  {
+    LL_RCC_ForceBackupDomainReset();
+    LL_RCC_ReleaseBackupDomainReset();
+    LL_RCC_SetRTCClockSource(LL_RCC_RTC_CLKSOURCE_LSE);
+  }
   LL_RCC_EnableRTC();
   LL_RCC_SetTIMClockSource(LL_RCC_TIM1_CLKSOURCE_PCLK1);
 }
@@ -135,7 +131,7 @@ void Error_Handler(void)
   * @retval None
   */
 void assert_failed(uint8_t *file, uint32_t line)
-{ 
+{
   /* USER CODE BEGIN 6 */
   /* User can add his own implementation to report the file name and line number,
      tex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */

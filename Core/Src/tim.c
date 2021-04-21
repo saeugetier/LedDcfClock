@@ -1,12 +1,12 @@
 /**
   ******************************************************************************
-  * File Name          : TIM.c
-  * Description        : This file provides code for the configuration
-  *                      of the TIM instances.
+  * @file    tim.c
+  * @brief   This file provides code for the configuration
+  *          of the TIM instances.
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2021 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under BSD 3-Clause license,
@@ -31,12 +31,13 @@ void MX_TIM1_Init(void)
   LL_TIM_BDTR_InitTypeDef TIM_BDTRInitStruct = {0};
 
   LL_GPIO_InitTypeDef GPIO_InitStruct = {0};
+
   /* Peripheral clock enable */
   LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_TIM1);
-  
+
   LL_IOP_GRP1_EnableClock(LL_IOP_GRP1_PERIPH_GPIOB);
-  /**TIM1 GPIO Configuration  
-  PB6   ------> TIM1_CH3 
+  /**TIM1 GPIO Configuration
+  PB6   ------> TIM1_CH3
   */
   GPIO_InitStruct.Pin = DCF_IN_TIM_Pin;
   GPIO_InitStruct.Mode = LL_GPIO_MODE_ALTERNATE;
@@ -85,7 +86,7 @@ void MX_TIM3_Init(void)
   LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_TIM3);
 
   /* TIM3 DMA Init */
-  
+
   /* TIM3_UP Init */
   LL_DMA_SetPeriphRequest(DMA1, LL_DMA_CHANNEL_1, LL_DMAMUX_REQ_TIM3_UP);
 
@@ -120,8 +121,8 @@ void MX_TIM3_Init(void)
   LL_TIM_SetTriggerOutput(TIM3, LL_TIM_TRGO_RESET);
   LL_TIM_DisableMasterSlaveMode(TIM3);
   LL_IOP_GRP1_EnableClock(LL_IOP_GRP1_PERIPH_GPIOB);
-    /**TIM3 GPIO Configuration    
-    PB0     ------> TIM3_CH3 
+    /**TIM3 GPIO Configuration
+    PB0     ------> TIM3_CH3
     */
   GPIO_InitStruct.Pin = WS2812_Pin;
   GPIO_InitStruct.Mode = LL_GPIO_MODE_ALTERNATE;

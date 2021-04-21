@@ -1,12 +1,12 @@
 /**
   ******************************************************************************
-  * File Name          : RTC.c
-  * Description        : This file provides code for the configuration
-  *                      of the RTC instances.
+  * @file    rtc.c
+  * @brief   This file provides code for the configuration
+  *          of the RTC instances.
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2021 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under BSD 3-Clause license,
@@ -51,7 +51,7 @@ void MX_RTC_Init(void)
   RTC_DateStruct.Year = 0x16;
 
   LL_RTC_DATE_Init(RTC, LL_RTC_FORMAT_BCD, &RTC_DateStruct);
-  /** Enable the Alarm A 
+  /** Enable the Alarm A
   */
   RTC_AlarmStruct.AlarmTime.Hours = 0x0;
   RTC_AlarmStruct.AlarmTime.Minutes = 0x0;
@@ -59,7 +59,6 @@ void MX_RTC_Init(void)
   RTC_AlarmStruct.AlarmMask = LL_RTC_ALMA_MASK_NONE;
   RTC_AlarmStruct.AlarmDateWeekDaySel = LL_RTC_ALMA_DATEWEEKDAYSEL_DATE;
   RTC_AlarmStruct.AlarmDateWeekDay = 0x1;
-
   LL_RTC_ALMA_Init(RTC, LL_RTC_FORMAT_BCD, &RTC_AlarmStruct);
   LL_RTC_SetOutputPolarity(RTC, LL_RTC_OUTPUTPOLARITY_PIN_HIGH );
   LL_RTC_SetAlarmOutputType(RTC, LL_RTC_ALARM_OUTPUTTYPE_OPENDRAIN );
